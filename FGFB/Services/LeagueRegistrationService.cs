@@ -33,33 +33,34 @@ namespace FGFB.Services
         {
             return Math.Round((amount * 0.03m) + 0.30m, 2);
         }
-
-        public async Task ProcessSession(string sessionId)
+        public async Task ProcessCompletedCheckoutSessionAsync(Session session)
         {
-            StripeConfiguration.ApiKey = _stripe.SecretKey;
-
-            var service = new SessionService();
-            var session = await service.GetAsync(sessionId);
-
-            if (session.PaymentStatus != "paid")
-                return;
+            if (session == null) return;
+            if (!string.Equals(session.PaymentStatus, "paid", StringComparison.OrdinalIgnoreCase)) return;
 
             var exists = await _context.LeagueRegistrations
-                .AnyAsync(x => x.StripeSessionId == sessionId);
+                .AnyAsync(x => x.StripeSessionId == session.Id);
 
-            if (exists)
-                return;
+            if (exists) return;
+
+            if (session.Metadata == null ||
+                !session.Metadata.ContainsKey("leagueId") ||
+                !session.Metadata.ContainsKey("email") ||
+                !session.Metadata.ContainsKey("entryFee") ||
+                !session.Metadata.ContainsKey("processingFee"))
+            {
+                throw new InvalidOperationException("Stripe session metadata is incomplete.");
+            }
 
             var leagueId = long.Parse(session.Metadata["leagueId"]);
             var email = session.Metadata["email"];
+            var entryFee = decimal.Parse(session.Metadata["entryFee"]);
+            var fee = decimal.Parse(session.Metadata["processingFee"]);
+            var total = entryFee + fee;
 
             var league = await _context.Leagues.FindAsync(leagueId);
             if (league == null)
                 throw new InvalidOperationException("League not found.");
-
-            decimal entryFee = decimal.Parse(session.Metadata["entryFee"]);
-            decimal fee = decimal.Parse(session.Metadata["processingFee"]);
-            decimal total = entryFee + fee;
 
             var reg = new LeagueRegistration
             {
@@ -75,10 +76,26 @@ namespace FGFB.Services
                 CreatedAt = DateTime.UtcNow
             };
 
-            _context.Add(reg);
+            _context.LeagueRegistrations.Add(reg);
             await _context.SaveChangesAsync();
 
-            await SendLeagueAccessEmailAsync(email, league, entryFee, fee, total);
+            try
+            {
+                await SendLeagueAccessEmailAsync(email, league, entryFee, fee, total);
+            }
+            catch
+            {
+                // swallow email failure so registration stays saved
+            }
+        }
+        public async Task ProcessSession(string sessionId)
+        {
+            StripeConfiguration.ApiKey = _stripe.SecretKey;
+
+            var service = new SessionService();
+            var session = await service.GetAsync(sessionId);
+
+            await ProcessCompletedCheckoutSessionAsync(session);
         }
         public async Task<(LeagueRegistration Registration, League League)?> ProcessSessionAndReturnAsync(string sessionId)
         {
@@ -94,6 +111,7 @@ namespace FGFB.Services
 
             return (registration, league);
         }
+
         private async Task SendLeagueAccessEmailAsync(
             string toEmail,
             League league,

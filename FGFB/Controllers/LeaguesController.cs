@@ -8,12 +8,15 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Stripe;
+using Microsoft.AspNetCore.Hosting; 
 using Stripe.Checkout;
 
 namespace FGFB.Controllers
 {
+    
     public class LeaguesController : Controller
     {
+        private readonly IWebHostEnvironment _environment;
         private readonly ApplicationDbContext _context;
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly MailchimpSettings _mailchimpSettings;
@@ -21,19 +24,60 @@ namespace FGFB.Controllers
         private readonly LeagueRegistrationService _registrationService;
 
         public LeaguesController(
-            ApplicationDbContext context,
-            IHttpClientFactory httpClientFactory,
-            IOptions<MailchimpSettings> mailchimpOptions,
-            IOptions<StripeSettings> stripeOptions,
-            LeagueRegistrationService registrationService)
+                ApplicationDbContext context,
+                IHttpClientFactory httpClientFactory,
+                IOptions<MailchimpSettings> mailchimpOptions,
+                IOptions<StripeSettings> stripeOptions,
+                LeagueRegistrationService registrationService,
+                IWebHostEnvironment environment)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;
             _mailchimpSettings = mailchimpOptions.Value;
             _stripeSettings = stripeOptions.Value;
             _registrationService = registrationService;
+            _environment = environment;
         }
+        [HttpPost]
+        [IgnoreAntiforgeryToken]
+        public async Task<IActionResult> Webhook()
+        {
+            var json = await new StreamReader(Request.Body).ReadToEndAsync();
 
+            Event stripeEvent;
+
+            try
+            {
+                if (_environment.IsDevelopment())
+                {
+                    stripeEvent = EventUtility.ParseEvent(json);
+                }
+                else
+                {
+                    stripeEvent = EventUtility.ConstructEvent(
+                        json,
+                        Request.Headers["Stripe-Signature"],
+                        _stripeSettings.WebhookSecret
+                    );
+                }
+
+                if (stripeEvent.Type == "checkout.session.completed")
+                {
+                    var session = stripeEvent.Data.Object as Session;
+
+                    if (session != null)
+                    {
+                        await _registrationService.ProcessCompletedCheckoutSessionAsync(session);
+                    }
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Webhook error: {ex.Message}");
+            }
+        }
         [HttpGet]
         public async Task<IActionResult> Index(decimal? maxEntryFee, DateTime? draftDateFrom, bool bestBallOnly = false)
         {
@@ -185,17 +229,11 @@ namespace FGFB.Controllers
             var fee = _registrationService.CalculateFee(league.EntryFee.Value);
             var total = league.EntryFee.Value + fee;
 
-            var successUrl = Url.Action(
-                nameof(PaymentSuccess),
-                "Leagues",
-                new { session_id = "{CHECKOUT_SESSION_ID}" },
-                Request.Scheme)!;
+            var successUrl =
+                $"{Request.Scheme}://{Request.Host}/Leagues/PaymentSuccess?session_id={{CHECKOUT_SESSION_ID}}";
 
-            var cancelUrl = Url.Action(
-                nameof(Payment),
-                "Leagues",
-                new { id = leagueId, email },
-                Request.Scheme)!;
+            var cancelUrl =
+                $"{Request.Scheme}://{Request.Host}/Leagues/Payment?id={leagueId}&email={Uri.EscapeDataString(email)}";
 
             var options = new SessionCreateOptions
             {
@@ -239,11 +277,6 @@ namespace FGFB.Controllers
         public async Task<IActionResult> PaymentSuccess(string session_id)
         {
             if (string.IsNullOrWhiteSpace(session_id))
-                return BadRequest();
-
-            var result = await _registrationService.ProcessSessionAndReturnAsync(session_id);
-
-            if (result == null)
             {
                 return View(new LeaguePaymentSuccessViewModel
                 {
@@ -251,8 +284,26 @@ namespace FGFB.Controllers
                 });
             }
 
-            var registration = result.Value.Registration;
-            var league = result.Value.League;
+            var registration = await _context.LeagueRegistrations
+                .FirstOrDefaultAsync(r => r.StripeSessionId == session_id);
+
+            if (registration == null)
+            {
+                await _registrationService.ProcessSession(session_id);
+
+                registration = await _context.LeagueRegistrations
+                    .FirstOrDefaultAsync(r => r.StripeSessionId == session_id);
+            }
+
+            if (registration == null)
+            {
+                return View(new LeaguePaymentSuccessViewModel
+                {
+                    PaymentStatus = "Processing"
+                });
+            }
+
+            var league = await _context.Leagues.FirstAsync(l => l.LeagueId == registration.LeagueId);
 
             var vm = new LeaguePaymentSuccessViewModel
             {

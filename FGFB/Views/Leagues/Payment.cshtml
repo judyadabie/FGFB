@@ -63,15 +63,14 @@
                             Continue to secure checkout to complete your signup.
                         </p>
 
-                        <form asp-action="Checkout" asp-controller="Leagues" method="post">
-                            @Html.AntiForgeryToken()
-                            <input type="hidden" name="leagueId" value="@Model.LeagueId" />
-                            <input type="hidden" name="email" value="@Model.Email" />
-
-                            <button type="submit" class="league-join-btn league-join-btn--full">
-                                Continue to Checkout
-                            </button>
-                        </form>
+                       <form asp-controller="Leagues" asp-action="CreateStripeCheckout" method="post">
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="leagueId" value="@Model.LeagueId" />
+    <input type="hidden" name="email" value="@Model.Email" />
+    <button type="submit" class="league-join-btn league-join-btn--full">
+        Continue to Checkout
+    </button>
+</form>
                     </div>
                 </div>
             </div>
