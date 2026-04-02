@@ -1,0 +1,638 @@
+﻿@model FGFB.Models.Item
+@using FGFB.Models
+@using System.Text.Json
+
+@{
+    Layout = "_Layout";
+    var fields = Model.Fields;
+    var includes = ViewBag.Includes as Includes;
+
+    var title = fields?.Title ?? "";
+    var createdDate = Model.Sys?.CreatedAt?.ToString("MMMM dd, yyyy") ?? "";
+
+    ViewData["Title"] = title;
+    ViewData["MetaDescription"] = title;
+    ViewData["MetaKeywords"] = title;
+
+    var headerImageId = fields?.HeaderImage?.Sys?.Id ?? fields?.Thumbnail?.Sys?.Id;
+    var headerImage = includes?.Asset?.FirstOrDefault(a => a.Sys?.Id == headerImageId);
+    var headerImageUrl = headerImage?.Fields?.File?.Url != null
+        ? $"https:{headerImage.Fields.File.Url}"
+        : "/img/blog/TaylorSwift.png";
+
+    var authorId = fields?.Author?.Sys?.Id;
+    var author = includes?.Entry?.FirstOrDefault(e => e.Sys?.Id == authorId);
+    var authorName = !string.IsNullOrWhiteSpace(author?.Fields?.Name) ? author.Fields.Name : "Fan Girl Football";
+    var authorImageId = author?.Fields?.Picture?.Sys?.Id;
+
+    var authorImage = includes?.Asset?.FirstOrDefault(a => a.Sys?.Id == authorImageId);
+    var authorImageUrl = authorImage?.Fields?.File?.Url != null
+        ? $"https:{authorImage.Fields.File.Url}"
+        : "/img/default-author.png";
+}
+
+<div id="loading">
+    <div id="loading-center">
+        <div id="loading-center-absolute">
+            <div class="loading-content">
+                <img class="loading-logo-text" src="/img/logo/FGFLogoNewFont.png" alt="Fan Girl Football Pencil">
+                <div class="loading-stroke">
+                    <img class="loading-logo-icon" src="~/img/shape/hero/football.png" alt="Fan Girl Football Pencil Stroke">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+ <!-- sidebar area start -->
+    <div class="sidebar__area">
+        <div class="sidebar__wrapper">
+            <div class="sidebar__close">
+                <button class="sidebar__close-btn" id="sidebar__close-btn">
+                    <span><i class="fal fa-times"></i></span>
+                    <span>close</span>
+                </button>
+            </div>
+            <div class="sidebar__content">
+                <div class="logo mb-40">
+                    <a href="index" rel="nofollow">
+                        <img src="/img/logo/FGFBLogo150.png" alt="logo">
+                    </a>
+                </div>
+                <div class="mobile-menu fix"></div>
+
+
+
+            </div>
+        </div>
+    </div>
+    <!-- sidebar area end -->
+<header>
+    <div id="header-sticky" class="header__area header__padding header__white blog-detail-header-solid">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-xxl-3 col-xl-3 col-lg-4 col-md-2 col-sm-4 col-6">
+                    <div class="header__left d-flex">
+                        <div class="logo">
+                            <a href="/index" rel="nofollow">
+                                <img id="FGFBLogow" class="logo-white" src="/img/logo/FGFLogoWhiteTransparent.png" alt="logo">
+                                <img id="FGFBLogo" class="logo-black" src="/img/logo/FGFLogoNewFont.png" alt="logo">
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xxl-9 col-xl-9 col-lg-8 col-md-10 col-sm-8 col-6">
+                    <div class="header__right d-flex justify-content-end align-items-center">
+                        <div class="main-menu main-menu-3">
+                            <nav id="mobile-menu">
+                                <ul>
+                                    <li><a href="/Index" rel="nofollow">Home</a></li>
+                                    <li><a href="https://fan-girl-football.mn.co/sign_in">Login</a></li>
+                                    <li><a href="https://shop.fangirlfootball.com/" target="_blank">Shop FanGirl</a></li>
+                                    <li><a href="/Articles">Articles</a></li>
+                                    <li><a href="/About">About</a></li>
+                                    <li><a href="https://www.youtube.com/&#64FanGirlFootball" target="YouTube">YouTube</a></li>
+                                    <li><a href="/FantasyFootballBook">Get the Book</a></li>
+                                    <li><a href="/contact">Contact</a></li>
+                                </ul>
+                            </nav>
+                        </div>
+
+                        <div class="header__btn ml-20 d-none d-sm-block">
+                            <a href="https://fan-girl-football.mn.co/sign_up" class="e-btn">Join Now - FREE!</a>
+                        </div>
+
+                        <div class="sidebar__menu d-xl-none">
+                            <div class="sidebar-toggle-btn ml-30" id="sidebar-toggle">
+                                <span class="line"></span>
+                                <span class="line"></span>
+                                <span class="line"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main class="blog-detail-page">
+    <section class="page__title-area">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-10 col-xl-10 col-lg-10">
+                    <div class="page__title-wrapper text-center">
+                        <h1 class="page__title-2">@title</h1>
+
+                        <div class="blog__date blog__date-2 d-flex align-items-center justify-content-center blog__top-date">
+                            <i class="fal fa-clock mr-10"></i>
+                            <span>@createdDate</span>
+                        </div>
+
+                        @if (!string.IsNullOrEmpty(headerImageUrl))
+                        {
+                            <div class="blog__detail-image-wrap">
+                                <img src="@headerImageUrl" alt="@title" class="blog__detail-image" />
+
+                                <div class="blog__image-author-card">
+                                    <img src="@authorImageUrl" alt="@authorName" class="blog__author-avatar" />
+                                    <div class="blog__image-author-text">
+                                        <span class="blog__image-author-label">Written by</span>
+                                        <h5>@authorName</h5>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="blog__author-below d-flex align-items-center justify-content-center">
+                                <img src="@authorImageUrl" alt="@authorName" class="blog__author-avatar" />
+                                <div class="blog__image-author-text">
+                                    <span class="blog__image-author-label">Written by</span>
+                                    <h5>@authorName</h5>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="blog__area">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-8 col-xl-8 col-lg-9">
+                    <div class="blog__wrapper">
+                        <div class="blog__text">
+                            @Html.Raw(RenderRichText(fields?.BlogBody, includes))
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+
+    main,
+    .blog-detail-page,
+    .page__title-area,
+    .page__title-wrapper {
+        min-height: auto !important;
+        height: auto !important;
+        padding-top: 0px !important;
+        padding-bottom: 30px !important;
+        margin-top: 0 !important;
+        display: block !important;
+    }
+
+    #header-sticky,
+    #header-sticky.sticky {
+        margin-bottom: 0 !important;
+    }
+
+    .header__area,
+    .header__area.sticky {
+        top: 0 !important;
+    }
+    /* PAGE SPACING */
+    .blog-detail-page {
+        padding-top: 0
+    }
+
+    .page__title-2 {
+        color: #111 !important;
+    }
+
+    .blog__date span,
+    .blog__date i {
+        color: #555 !important;
+    }
+    .page__title-area {
+        background: none !important;
+        padding-top: 10px !important;
+        padding-bottom: 35px !important;
+        margin-top: 0 !important;
+    }
+
+    .page__title-wrapper {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    .page__title-2 {
+        margin-bottom: 10px !important;
+        line-height: 1.2;
+    }
+
+    .page__title-height-2,
+    .page__title-overlay {
+        min-height: auto !important;
+        height: auto !important;
+    }
+
+    .page__title-area.d-flex {
+        display: block !important;
+        align-items: unset !important;
+    }
+    .blog__top-date {
+        margin-bottom: 0px !important;
+    }
+
+    .blog__area {
+        padding-top: 0px !important;
+        padding-bottom: 0px !important;
+    }
+
+    .blog__wrapper {
+        margin-top: 0 !important;
+        padding-top: 0 !important;
+    }
+
+    .blog__text {
+        margin-bottom: 0 !important;
+    }
+
+    /* SOLID HEADER THAT DOES NOT CHANGE ON SCROLL */
+    .blog-detail-header-solid,
+    .blog-detail-header-solid.sticky {
+        background: #ffffff !important;
+        border-bottom: 1px solid #e8e8e8 !important;
+        box-shadow: none !important;
+    }
+
+        .blog-detail-header-solid .main-menu ul li a,
+        .blog-detail-header-solid.sticky .main-menu ul li a {
+            color: #111 !important;
+        }
+
+        .blog-detail-header-solid .sidebar-toggle-btn .line,
+        .blog-detail-header-solid.sticky .sidebar-toggle-btn .line {
+            background-color: #111 !important;
+        }
+
+        .blog-detail-header-solid .logo-white,
+        .blog-detail-header-solid.sticky .logo-white {
+            display: none !important;
+        }
+
+        .blog-detail-header-solid .logo-black,
+        .blog-detail-header-solid.sticky .logo-black {
+            display: inline-block !important;
+        }
+
+        /* tighten header itself */
+        .blog-detail-header-solid.header__padding,
+        .blog-detail-header-solid.sticky.header__padding {
+            padding-top: 10px !important;
+            padding-bottom: 10px !important;
+        }
+
+    /* IMAGE */
+    .blog__detail-image-wrap {
+        position: relative;
+        max-width: 900px;
+        margin: 0 auto;
+        border-radius: 18px;
+        overflow: hidden;
+        background: #f5f5f5;
+    }
+
+    .blog__detail-image {
+        width: 100%;
+        max-height: 500px;
+        object-fit: cover;
+        object-position: center;
+        display: block;
+    }
+
+    /* AUTHOR ON IMAGE */
+    .blog__image-author-card {
+       
+        left: 24px;
+        bottom: 24px;
+        display: flex;
+        align-items: center;
+        gap: 1px;
+
+        padding: 5px 5px;
+        border-radius: 999px;
+
+        max-width: calc(100% - 48px);
+    }
+
+    .blog__author-below {
+        gap: 12px;
+        margin-top: 10px;
+    }
+
+    .blog__author-avatar {
+        width: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+        padding-bottom: 0px;
+        
+    }
+    img, svg{
+        padding-bottom: 0px;
+    }
+    .blog__image-author-text {
+        text-align: left;
+        line-height: 1.2;
+    }
+   .blog__text img,
+.blog-content-image {
+    display: block;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    margin: 20px auto;
+}
+@@media (max-width: 767px) {
+    .blog__text img,
+    .blog-content-image {
+        max-width: 100%;
+        width: 100%;
+        height: auto;
+        margin: 15px 0;
+        border-radius: 12px;
+    }
+}
+    .blog__image-author-label {
+        display: block;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #777;
+        margin-bottom: 2px;
+    }
+
+    .blog__image-author-text h5 {
+        margin: 0;
+        font-size: 16px;
+        color: #111;
+    }
+
+    /* ARTICLE BODY */
+    .blog__text img {
+       
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin: 15px 0;
+    }
+
+    .blog__text p,
+    .blog__text li {
+        line-height: 1.8;
+    }
+
+    .blog__text h2,
+    .blog__text h3 {
+        margin-top: 32px;
+    }
+
+    .blog__text p:first-child {
+        margin-top: 0;
+    }
+
+    @@media (max-width: 991px) {
+        .blog-detail-page {
+            padding-top: 82px;
+        }
+    }
+    width: 100%;
+        max-height: 300px;
+        object-fit: cover;
+        border-radius: 12px;
+        margin: 15px 0;
+    @@media (max-width: 767px) {
+        .blog-detail-page {
+            padding-top: 76px;
+        }
+
+        .page__title-area {
+            padding-top: 12px !important;
+            padding-bottom: 25px !important;
+        }
+
+        .page__title-2 {
+            margin-bottom: 8px !important;
+        }
+
+        .blog__top-date {
+            margin-bottom: 14px !important;
+        }
+
+        .blog__detail-image {
+            max-height: 320px;
+        }
+
+        .blog__image-author-card {
+            left: 14px;
+            right: 14px;
+            bottom: 14px;
+            max-width: none;
+            border-radius: 16px;
+            padding: 10px 12px;
+        }
+
+        .blog__author-avatar {
+            width: 44px;
+            height: 44px;
+            min-width: 44px;
+        }
+    }
+</style>
+
+<footer>
+    <div class="footer__area footer-bg">
+        <div class="footer__top pt-190 pb-40">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <div class="footer__widget mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <div class="footer__logo">
+                                    <a href="/index" rel="nofollow">
+                                        <img src="/img/logo/FGFLogoWhiteTransparent.png" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="footer__widget-body">
+                                <p style="color: white;">A welcoming space for women to connect, learn fantasy football, and share their love for the game.</p>
+
+                                <div class="footer__social">
+                                    <ul>
+                                        <li><a href="https://www.facebook.com/profile.php?id=61560972640348" target="Facebook"><i class="social_facebook"></i></a></li>
+                                        <li><a href="https://www.instagram.com/fan.girl.football/" target="Instagram" class="tw"><i class="social_instagram"></i></a></li>
+                                        <li><a href="https://www.youtube.com/&#64FanGirlFootball" target="YouTube" class="pin"><i class="social_youtube"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-2 offset-xxl-1 col-xl-2 offset-xl-1 col-lg-3 offset-lg-0 col-md-2 offset-md-1 col-sm-5 offset-sm-1">
+                        <div class="footer__widget mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <h3 class="footer__widget-title"> </h3>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-2 col-xl-2 col-lg-2 offset-lg-0 col-md-3 offset-md-1 col-sm-6">
+                        <div class="footer__widget mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <h3 class="footer__widget-title"> </h3>
+                            </div>
+                            <div class="footer__widget-body">
+                                <div class="footer__link">
+                                    <a href="#" class="termly-display-preferences" style="color:white;">Consent Preferences</a>
+                                    <a href="~/PrivacyPolicy.html" target="_blank" style="color:white;">Privacy Policy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-5 col-sm-6">
+                        <div class="footer__widget footer__pl-70 mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <h3 class="footer__widget-title">Subscribe</h3>
+                            </div>
+                            <div class="footer__widget-body">
+                                <div class="footer__subscribe">
+                                    <p style="color: white;">Get the latest news and updates right at your inbox.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer__bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xxl-12">
+                        <div class="footer__copyright text-center">
+                            <p>© 2025 Sports Fan Girl, All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<script src="~/js/vendor/jquery-3.5.1.min.js"></script>
+<script src="~/js/vendor/waypoints.min.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/jquery.meanmenu.js"></script>
+<script src="~/js/swiper-bundle.min.js"></script>
+<script src="~/js/owl.carousel.min.js"></script>
+<script src="~/js/jquery.fancybox.min.js"></script>
+<script src="~/js/isotope.pkgd.min.js"></script>
+<script src="~/js/parallax.min.js"></script>
+<script src="~/js/backToTop.js"></script>
+<script src="~/js/purecounter.js"></script>
+<script src="~/js/ajax-form.js"></script>
+<script src="~/js/wow.min.js"></script>
+<script src="~/js/imagesloaded.pkgd.min.js"></script>
+<script src="~/js/main.js"></script>
+<script src="~/js/overrides.js"></script>
+
+@functions {
+    public string RenderRichText(RichTextDocument? document, Includes? includes)
+    {
+        if (document?.Content == null) return string.Empty;
+        return string.Join("", document.Content.Select(x => RenderNode(x, includes)));
+    }
+
+    public string RenderNode(RichTextNode? node, Includes? includes)
+    {
+        if (node == null) return string.Empty;
+
+        if (node.NodeType == "text")
+        {
+            return ApplyMarks(node.Value ?? string.Empty, node.Marks);
+        }
+
+        if (node.NodeType == "embedded-asset-block")
+        {
+            return RenderEmbeddedAsset(node, includes);
+        }
+
+        var inner = node.Content == null
+            ? string.Empty
+            : string.Join("", node.Content.Select(x => RenderNode(x, includes)));
+
+        return node.NodeType switch
+        {
+            "paragraph" => $"<p>{inner}</p>",
+            "heading-1" => $"<h1>{inner}</h1>",
+            "heading-2" => $"<h2>{inner}</h2>",
+            "heading-3" => $"<h3>{inner}</h3>",
+            "unordered-list" => $"<ul>{inner}</ul>",
+            "ordered-list" => $"<ol>{inner}</ol>",
+            "list-item" => $"<li>{inner}</li>",
+            "hr" => "<hr>",
+            "hyperlink" => BuildLink(node, inner),
+            _ => inner
+        };
+    }
+
+    public string ApplyMarks(string text, List<Mark>? marks)
+    {
+        if (marks == null || !marks.Any()) return text;
+
+        foreach (var mark in marks)
+        {
+            text = mark.Type switch
+            {
+                "bold" => $"<strong>{text}</strong>",
+                "italic" => $"<em>{text}</em>",
+                "underline" => $"<u>{text}</u>",
+                _ => text
+            };
+        }
+
+        return text;
+    }
+
+    public string BuildLink(RichTextNode node, string inner)
+    {
+        if (node.Data != null &&
+            node.Data.TryGetValue("uri", out JsonElement uriElement) &&
+            uriElement.ValueKind == JsonValueKind.String)
+        {
+            var uri = uriElement.GetString();
+            return $"<a target=\"_blank\" rel=\"noopener noreferrer\" class=\"mylinks\" href=\"{uri}\">{inner}</a>";
+        }
+
+        return inner;
+    }
+
+    public string RenderEmbeddedAsset(RichTextNode node, Includes? includes)
+    {
+        if (node.Data == null ||
+            !node.Data.TryGetValue("target", out JsonElement targetElement) ||
+            !targetElement.TryGetProperty("sys", out JsonElement sysElement) ||
+            !sysElement.TryGetProperty("id", out JsonElement idElement))
+        {
+            return string.Empty;
+        }
+
+        var assetId = idElement.GetString();
+        if (string.IsNullOrEmpty(assetId)) return string.Empty;
+
+        var asset = includes?.Asset?.FirstOrDefault(a => a.Sys?.Id == assetId);
+        if (asset?.Fields?.File?.Url == null) return string.Empty;
+
+        var url = $"https:{asset.Fields.File.Url}";
+        var alt = asset.Fields.Title ?? "";
+        return $"<img class=\"blog-content-image\" src=\"{url}\" alt=\"{alt}\">";
+    }
+}

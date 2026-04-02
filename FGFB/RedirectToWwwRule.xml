@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<rewrite>
+  <rules>
+    <rule name="CanonicalHostNameRule">
+      <match url="(.*)" />
+      <conditions>
+        <add input="{HTTP_HOST}" pattern="^fangirlfootball\.com$" negate="true" />
+      </conditions>
+      <action type="Redirect" url="https://www.fangirlfootball.com/” />"
+    </rule>
+  </rules>
+</rewrite>

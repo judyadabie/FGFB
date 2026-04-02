@@ -1,0 +1,173 @@
+﻿@model FGFB.Models.LeagueJoinViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "League Payment";
+
+    var entryFee = Model.EntryFee ?? 0m;
+    var processingFee = Math.Round((entryFee * 0.03m) + 0.30m, 2);
+    var total = entryFee + processingFee;
+}
+
+@await Html.PartialAsync("_SiteHeader")
+
+<main class="league-page">
+    <section class="league-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="join-card">
+                        <h1 class="page__title-2 join-title">Complete Payment</h1>
+
+                        <p class="join-help-text">
+                            Your Fan Girl Football email was validated successfully.
+                        </p>
+
+                        <div class="join-league-info">
+                            <div class="join-info-row">
+                                <span class="join-info-label">League Type</span>
+                                <span class="join-info-value">@Model.LeagueType</span>
+                            </div>
+
+                            <div class="join-info-row">
+                                <span class="join-info-label">Entry Fee</span>
+                                <span class="join-info-value">@entryFee.ToString("C")</span>
+                            </div>
+
+                            <div class="join-info-row">
+                                <span class="join-info-label">Processing Fee</span>
+                                <span class="join-info-value">@processingFee.ToString("C")</span>
+                            </div>
+
+                            <div class="join-info-row">
+                                <span class="join-info-label"><strong>Total</strong></span>
+                                <span class="join-info-value"><strong>@total.ToString("C")</strong></span>
+                            </div>
+
+                            <div class="join-info-row">
+                                <span class="join-info-label">Draft Date</span>
+                                <span class="join-info-value">
+                                    @(Model.DraftDate.HasValue
+                                                                        ? Model.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt")
+                                                                        : "TBD")
+                                </span>
+                            </div>
+
+                            <div class="join-info-row">
+                                <span class="join-info-label">Member Email</span>
+                                <span class="join-info-value">@Model.Email</span>
+                            </div>
+                        </div>
+
+                        <p class="join-help-text">
+                            Continue to secure checkout to complete your signup.
+                        </p>
+
+                        <form asp-action="Checkout" asp-controller="Leagues" method="post">
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" name="leagueId" value="@Model.LeagueId" />
+                            <input type="hidden" name="email" value="@Model.Email" />
+
+                            <button type="submit" class="league-join-btn league-join-btn--full">
+                                Continue to Checkout
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@await Html.PartialAsync("_SiteFooter")
+
+<style>
+    .league-page .page__title-2 {
+        color: #111 !important;
+    }
+
+    .join-card {
+        background: #fff;
+        border: 1px solid #ececec;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        padding: 30px;
+    }
+
+    .join-title {
+        margin-bottom: 24px;
+    }
+
+    .join-league-info {
+        margin-bottom: 24px;
+        border: 1px solid #efefef;
+        border-radius: 12px;
+        overflow: hidden;
+    }
+
+    .join-info-row {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 16px 18px;
+        border-bottom: 1px solid #efefef;
+    }
+
+        .join-info-row:last-child {
+            border-bottom: none;
+        }
+
+    .join-info-label {
+        font-weight: 700;
+        color: #555;
+    }
+
+    .join-info-value {
+        color: #111;
+        text-align: right;
+    }
+
+    .join-help-text {
+        color: #555;
+        margin-bottom: 16px;
+    }
+
+    .league-join-btn {
+        background: #e6dcff;
+        color: #4b2bbd;
+        border: none;
+        border-radius: 999px;
+        padding: 14px 26px;
+        font-weight: 600;
+        font-size: 16px;
+        text-align: center;
+        display: inline-block;
+        transition: all 0.25s ease;
+        box-shadow: 0 6px 16px rgba(123, 97, 255, 0.2);
+    }
+
+    .league-join-btn--full {
+        width: 100%;
+    }
+
+    .league-join-btn:hover {
+        background: #d4c6ff;
+        color: #3a1fa3;
+        text-decoration: none;
+    }
+
+    @@media (max-width: 767px) {
+        .join-card {
+            padding: 20px;
+        }
+
+        .join-info-row {
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .join-info-value {
+            text-align: left;
+        }
+    }
+</style>

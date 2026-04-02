@@ -1,0 +1,65 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.btn:focus, .btn:active:focus, .btn-link.nav-link:focus, .form-control:focus, .form-check-input:focus {
+  box-shadow: 0 0 0 0.1rem white, 0 0 0 0.25rem #258cfb;
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+a.mylinks {
+    text-decoration: underline;
+    text-decoration-color: blue;
+    color: blue;
+}
+
+/* Ensure hero title can be the reference for positioned children */
+.hero__title {
+  position: relative;
+}
+
+/* Make the span a positioned container and keep text above the image */
+.hero__title .yellow-shape {
+  position: relative;
+  display: inline-block;
+  line-height: 1; /* avoid extra vertical shift */
+  padding-inline: 0.25rem;
+}
+
+/* Position the decorative image absolutely and push it behind the text */
+.hero__title .yellow-shape img {
+  position: absolute;
+  inset: 50% auto auto 50%; /* center by default */
+  transform: translate(-50%, -50%);
+               /* behind the span's text */
+  display: block;
+  width: clamp(140px, 28vw, 260px); /* fluid size, adjust as needed */
+  height: auto;
+  pointer-events: none;      /* don't block taps/selection */
+  user-select: none;
+}
+
+/* Tweak on narrow phones so the yellow-bg doesn't cover text */
+@media (max-width: 420px) {
+  .hero__title .yellow-shape img {
+    width: clamp(160px, 40vw, 220px);
+    transform: translate(-50%, -45%); /* slightly nudge for visual balance */
+  }
+}
+
+
+

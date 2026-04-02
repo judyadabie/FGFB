@@ -1,0 +1,80 @@
+﻿@{
+    Layout = "_Layout";
+    ViewData["Title"] = "League Signup Complete";
+}
+
+@await Html.PartialAsync("_SiteHeader")
+
+<main class="league-page">
+    <section class="league-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="join-card">
+                        <h1 class="page__title-2 join-title">Thanks for signing up!</h1>
+
+                        <p class="join-help-text">
+                            Your payment was completed successfully.
+                        </p>
+
+                        <div class="join-success-box">
+                            <div class="join-success-title">Here is how to access the league</div>
+                            <p class="join-help-text">
+                                Your league access details have been sent to your email address.
+                            </p>
+                            <p class="join-help-text">
+                                You can close this page or return to the site.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@await Html.PartialAsync("_SiteFooter")
+
+<style>
+    .league-page .page__title-2 {
+        color: #111 !important;
+    }
+
+    .join-card {
+        background: #fff;
+        border: 1px solid #ececec;
+        border-radius: 16px;
+        box-shadow: 0 6px 20px rgba(0,0,0,0.05);
+        padding: 30px;
+    }
+
+    .join-title {
+        margin-bottom: 24px;
+    }
+
+    .join-help-text {
+        color: #555;
+        margin-bottom: 16px;
+    }
+
+    .join-success-box {
+        background: #f8f5ff;
+        border: 1px solid #e6dcff;
+        border-radius: 16px;
+        padding: 22px;
+        text-align: center;
+    }
+
+    .join-success-title {
+        font-weight: 700;
+        font-size: 20px;
+        color: #3a1fa3;
+        margin-bottom: 10px;
+    }
+
+    @@media (max-width: 767px) {
+        .join-card {
+            padding: 20px;
+        }
+    }
+</style>

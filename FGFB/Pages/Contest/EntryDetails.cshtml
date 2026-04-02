@@ -1,0 +1,513 @@
+﻿@page
+@model FGFB.Pages.Contest.EntryDetailsModel
+@{
+}
+<div>
+
+    <img src="/img/logo/FGFLogoNewFont.png" />
+</div>
+<main>
+
+    <section class="blog__area">
+        <div class="container">
+
+               
+                            <h3><a href="~/Contest/ContestStandings" class="contest-link" style="text-decoration-line: underline;hover ">Full Standings</a></h3>
+                            <h1 class="contest-header">Entry Details</h1>
+                            <table>
+                                <tr><td><h4>Entry Name: @Model.entry.name</h4></td><td style="text-align:right;width:50%;"><h4>Total Score: @Model.entry.totalScore</h4></td></tr>
+                                <tr><td style="text-align:left;width:50%;"><h4>Ranking: @Model.entry.currentRank</h4></td><td style="text-align:right;width:50%;"><h4>Status: @Model.entry.status</h4></td></tr>
+
+                            </table>
+                            
+                            <table class="contestdetails-table">
+                                <thead>
+                                <td style="text-align:left;"><b>Player</b></td>
+                                <td style="text-align:left; font-weight:600;"><b>Tier</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 1</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 2</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 3</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 4</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 5</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 6</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 7</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 8</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 9</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 10</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 11</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 12</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 13</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 14</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 15</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 16</b></td>
+                                <td style="text-align:right; font-weight:600;"><b>Week 17</b></td>
+                                </thead>
+
+            
+        </div>
+    </section>
+    @{
+        decimal totalwk1 = 0;
+        decimal totalwk2 = 0;
+        decimal totalwk3 = 0;
+        decimal totalwk4 = 0;
+        decimal totalwk5 = 0;
+        decimal totalwk6 = 0;
+        decimal totalwk7 = 0;
+        decimal totalwk8 = 0;
+        decimal totalwk9 = 0;
+        decimal totalwk10 = 0;
+        decimal totalwk11 = 0;
+        decimal totalwk12 = 0;
+        decimal totalwk13 = 0;
+        decimal totalwk14 = 0;
+        decimal totalwk15 = 0;
+        decimal totalwk16 = 0;
+        decimal totalwk17 = 0;
+        foreach (FGFB.Models.Player player in Model.entry.team)
+        {
+            <tr>@if (player.rookie)
+                {
+                    <td>@player.playerName *</td>
+                }
+                else
+                {
+                    <td>@player.playerName </td>
+                }
+                <td>@player.Tier</td>
+                @if(player.WeeklyScores.Exists(n => n.week == 1))
+                {
+                    if(player.WeeklyScores.Find(n => n.week == 1).winner){
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 1).totalScore</td>
+                        totalwk1 += @player.WeeklyScores.Find(f => f.week == 1).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 1).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+
+                @if (player.WeeklyScores.Exists(n => n.week == 2))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 2).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 2).totalScore</td>
+                        totalwk2 += @player.WeeklyScores.Find(f => f.week == 2).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 2).totalScore</td>
+                    }
+                }
+                else{
+                    <td style ="text-align:right"> </td>
+                }
+                    
+
+                @if (player.WeeklyScores.Exists(n => n.week == 3))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 3).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 3).totalScore</td>
+                        totalwk3 += @player.WeeklyScores.Find(f => f.week == 3).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 3).totalScore</td>
+                    }
+                }
+                else{
+                    <td style ="text-align:right"> </td>
+                }
+
+                @if (player.WeeklyScores.Exists(n => n.week == 4))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 4).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 4).totalScore</td>
+                        totalwk4 += @player.WeeklyScores.Find(f => f.week == 4).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 4).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 5))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 5).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 5).totalScore</td>
+                        totalwk5 += @player.WeeklyScores.Find(f => f.week == 5).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 5).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 6))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 6).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 6).totalScore</td>
+                        totalwk6 += @player.WeeklyScores.Find(f => f.week == 6).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 6).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 7))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 7).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 7).totalScore</td>
+                        totalwk7 += @player.WeeklyScores.Find(f => f.week == 7).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 7).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 8))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 8).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 8).totalScore</td>
+                        totalwk8 += @player.WeeklyScores.Find(f => f.week == 8).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 8).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 9))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 9).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 9).totalScore</td>
+                        totalwk9 += @player.WeeklyScores.Find(f => f.week == 9).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 9).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 10))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 10).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 10).totalScore</td>
+                        totalwk10 += @player.WeeklyScores.Find(f => f.week == 10).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week ==10).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 11))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 11).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 11).totalScore</td>
+                        totalwk11 += @player.WeeklyScores.Find(f => f.week == 11).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 11).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 12))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 12).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 12).totalScore</td>
+                        totalwk12 += @player.WeeklyScores.Find(f => f.week == 12).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 12).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 13))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 13).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 13).totalScore</td>
+                        totalwk13 += @player.WeeklyScores.Find(f => f.week == 13).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 13).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 14))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 14).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 14).totalScore</td>
+                        totalwk14 += @player.WeeklyScores.Find(f => f.week == 14).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 14).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 15))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 15).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 15).totalScore</td>
+                        totalwk15 += @player.WeeklyScores.Find(f => f.week == 15).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 15).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 16))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 16).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 16).totalScore</td>
+                        totalwk16 += @player.WeeklyScores.Find(f => f.week == 16).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 16).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                @if (player.WeeklyScores.Exists(n => n.week == 17))
+                {
+                    if (player.WeeklyScores.Find(n => n.week == 17).winner)
+                    {
+                        <td style="text-align:right; background-color:yellow;">@player.WeeklyScores.Find(f => f.week == 17).totalScore</td>
+                        totalwk17 += @player.WeeklyScores.Find(f => f.week == 17).totalScore;
+                    }
+                    else
+                    {
+                        <td style="text-align:right">@player.WeeklyScores.Find(f => f.week == 17).totalScore</td>
+                    }
+                }
+                else
+                {
+                    <td style="text-align:right"> </td>
+                }
+                    </tr>
+               @if(player.Tier.EndsWith("C"))
+            {
+                <tr><td colspan="@(Model.entry.CurrentWeek + 2)" style="border-bottom:solid;"></td></tr>
+            }
+        }
+    }
+    <tr>
+        <td></td>
+        <td></td>
+        <td style="text-align:right">@totalwk1</td>
+        <td style="text-align:right">@totalwk2</td>
+        <td style="text-align:right">@totalwk3</td>
+        <td style="text-align:right">@totalwk4</td>
+        <td style="text-align:right">@totalwk5</td>
+        <td style="text-align:right">@totalwk6</td>
+        <td style="text-align:right">@totalwk7</td>
+        <td style="text-align:right">@totalwk8</td>
+        <td style="text-align:right">@totalwk9</td>
+        <td style="text-align:right">@totalwk10</td>
+        <td style="text-align:right">@totalwk11</td>
+        <td style="text-align:right">@totalwk12</td>
+        <td style="text-align:right">@totalwk13</td>
+        <td style="text-align:right">@totalwk14</td>
+        <td style="text-align:right">@totalwk15</td>
+        <td style="text-align:right">@totalwk16</td>
+        <td style="text-align:right">@totalwk17</td>
+    </tr>
+    </table>
+    <h4>* Indicates Rookie who earns a bonus</h4>
+    <h4>Yellow highlighted scores are the ones that we counted for the week.</h4>
+</main>
+
+<!-- footer area start -->
+<footer>
+    <div class="footer__area footer-bg">
+        <div class="footer__top pt-190 pb-40">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xxl-3 col-xl-3 col-lg-3 col-md-4 col-sm-6">
+                        <div class="footer__widget mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <div class="footer__logo">
+                                    <a href="index" rel="nofollow">
+                                        <img src="/img/logo/FGFLogoWhiteTransparent.png" alt="">
+                                    </a>
+                                </div>
+                            </div>
+                            <div class="footer__widget-body">
+                                <p style="color: white;">A welcoming space for women to connect, learn fantasy football, and share their love for the game.</p>
+
+                                <div class="footer__social">
+                                    <ul>
+                                        <li><a href="https://www.facebook.com/profile.php?id=61560972640348" target="Facebook"><i class="social_facebook"></i></a></li>
+                                        <li><a href="https://www.instagram.com/fan.girl.football/" target="Instagram" class="tw"><i class="social_instagram"></i></a></li>
+                                        <li><a href="https://www.youtube.com/&#64FanGirlFootball" target="YouTube" class="pin"><i class="social_youtube"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 offset-xxl-1 col-xl-2 offset-xl-1 col-lg-3 offset-lg-0 col-md-2 offset-md-1 col-sm-5 offset-sm-1">
+                        <div class="footer__widget mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <h3 class="footer__widget-title"> </h3>
+                            </div>
+                            <div class="footer__widget-body">
+                                <div class="footer__link">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-2 col-xl-2 col-lg-2 offset-lg-0 col-md-3 offset-md-1 col-sm-6">
+                        <div class="footer__widget mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <h3 class="footer__widget-title"> </h3>
+                            </div>
+                            <div class="footer__widget-body">
+                                <div class="footer__link">
+                                    <a href="#" class="termly-display-preferences" style="color:white;">Consent Preferences</a>
+                                    <a href="~/PrivacyPolicy.html" target="_blank" style="color:white;">Privacy Policy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xxl-4 col-xl-4 col-lg-4 col-md-5 col-sm-6">
+                        <div class="footer__widget footer__pl-70 mb-50">
+                            <div class="footer__widget-head mb-22">
+                                <h3 class="footer__widget-title">Subscribe</h3>
+                            </div>
+                            <div class="footer__widget-body">
+                                <div class="footer__subscribe">
+                                    <div id="mc_embed_shell">
+
+                                        <link href="//cdn-images.mailchimp.com/embedcode/classic-061523.css" rel="stylesheet" type="text/css">
+
+                                        <div id="mc_embed_signup">
+                                            <form action="https://footballfangirl.us22.list-manage.com/subscribe/post?u=769dd96d7de3ee73d6c778a42&amp;id=611a4cdc6f&amp;f_id=003adbe1f0" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_self" novalidate="">
+                                                <div id="mc_embed_signup_scroll">
+                                                    <div class="indicates-required" style="color: #ffffff;"><span class="asterisk">*</span> indicates required</div>
+                                                    <div class="mc-field-group" style="color: #FFFFFF;"><label for="mce-EMAIL">Email Address <span class="asterisk">*</span></label><input type="email" name="EMAIL" class="required email" id="mce-EMAIL" required="" value=""></div><div class="mc-field-group" style="color: #FFFFFF;"><label for="mce-FNAME">First Name <span class="asterisk">*</span></label><input type="text" name="FNAME" class="required text" id="mce-FNAME" required="" value=""></div>
+                                                    <div id="mce-responses" class="clear foot">
+                                                        <div class="response" id="mce-error-response" style="display: none;"></div>
+                                                        <div class="response" id="mce-success-response" style="display: none;"></div>
+                                                    </div>
+                                                    <div aria-hidden="true" style="position: absolute; left: -5000px;">
+                                                        /* real people should not fill this in and expect good things - do not remove this or risk form bot signups */
+                                                        <input type="text" name="b_769dd96d7de3ee73d6c778a42_611a4cdc6f" tabindex="-1" value="">
+                                                    </div>
+                                                    <div class="optionalParent">
+                                                        <div class="clear foot">
+                                                            <input type="submit" name="subscribe" id="mc-embedded-subscribe" class="e-btn" value="Subscribe">
+
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+
+
+                                    </div>
+
+                                    <p style="color: white;">Get the latest news and updates right at your inbox.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer__bottom">
+            <div class="container">
+                <div class="row">
+                    <div class="col-xxl-12">
+                        <div class="footer__copyright text-center">
+                            <p>© 2025 Sports Fan Girl, All Rights Reserved.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- footer area end -->
+<!-- JS here -->
+<script src="~/js/vendor/jquery-3.5.1.min.js"></script>
+<script src="~/js/vendor/waypoints.min.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/jquery.meanmenu.js"></script>
+<script src="~/js/swiper-bundle.min.js"></script>
+<script src="~/js/owl.carousel.min.js"></script>
+<script src="~/js/jquery.fancybox.min.js"></script>
+<script src="~/js/isotope.pkgd.min.js"></script>
+<script src="~/js/parallax.min.js"></script>
+<script src="~/js/backToTop.js"></script>
+<script src="~/js/purecounter.js"></script>
+<script src="~/js/ajax-form.js"></script>
+<script src="~/js/wow.min.js"></script>
+<script src="~/js/imagesloaded.pkgd.min.js"></script>
+<script src="~/js/main.js"></script>
+<script src="~/js/overrides.js"></script>
+
+

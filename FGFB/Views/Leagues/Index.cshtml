@@ -1,0 +1,537 @@
+﻿@model FGFB.Models.LeaguesFilterViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Leagues";
+    ViewData["MetaDescription"] = "Browse Fan Girl Football leagues and join the one that fits you best.";
+    ViewData["MetaKeywords"] = "fantasy football leagues, Fan Girl Football, women fantasy football leagues, wbna leagues";
+}
+
+<div id="loading">
+    <div id="loading-center">
+        <div id="loading-center-absolute">
+            <div class="loading-content">
+                <img class="loading-logo-text" src="~/img/logo/FGFLogoNewFont.png" alt="Fan Girl Football">
+                <div class="loading-stroke">
+                    <img class="loading-logo-icon" src="~/img/shape/hero/football.png" alt="Fan Girl Football">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@await Html.PartialAsync("_SiteHeader")
+
+<main class="league-page">
+    <section class="league-hero">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-10 col-xl-10 col-lg-10 text-center">
+                    <h1 class="page__title-2">@Model.SeasonYear Leagues</h1>
+                    <p class="league-hero__text">
+                        Browse open leagues and use the filters to find the right fit.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="league-filter-section pb-30">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-10 col-xl-10 col-lg-11">
+                    <div class="league-filter-box">
+                        <form method="get" asp-controller="Leagues" asp-action="Index" class="league-filter-form">
+                            <div class="row g-3 align-items-end">
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="maxEntryFee" class="league-filter-label">Max Entry Fee</label>
+                                    <input type="number"
+                                           step="0.01"
+                                           min="0"
+                                           id="maxEntryFee"
+                                           name="maxEntryFee"
+                                           value="@(Model.MaxEntryFee?.ToString("0.##"))"
+                                           class="league-filter-input"
+                                           placeholder="Any" />
+                                </div>
+
+                                <div class="col-lg-4 col-md-6">
+                                    <label for="draftDateFrom" class="league-filter-label">Draft Date On or After</label>
+                                    <input type="date"
+                                           id="draftDateFrom"
+                                           name="draftDateFrom"
+                                           value="@(Model.DraftDateFrom?.ToString("yyyy-MM-dd"))"
+                                           class="league-filter-input" />
+                                </div>
+
+                                <div class="col-lg-2 col-md-6">
+                                    <label class="league-filter-label d-block">Format</label>
+                                    <div class="league-checkbox-wrap">
+                                        <input type="checkbox"
+                                               id="bestBallOnly"
+                                               name="bestBallOnly"
+                                               value="true"
+                                               @(Model.BestBallOnly ? "checked" : "") />
+                                        <label for="bestBallOnly" class="league-checkbox-label">Best Ball Only</label>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-2 col-md-6">
+                                    <div class="league-filter-actions">
+                                        <button type="submit" class="league-filter-btn">Filter</button>
+                                        <a href="/Leagues" class="league-filter-reset">Reset</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="league-list-section pb-120">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-xxl-10 col-xl-10 col-lg-11">
+
+                    @if (Model.Leagues != null && Model.Leagues.Any())
+                    {
+                        <div class="league-results-count mb-20">
+                            @Model.Leagues.Count league@(Model.Leagues.Count == 1 ? "" : "s") found
+                        </div>
+
+                        <div class="league-table-wrapper d-none d-md-block">
+                            <table class="table league-table">
+                                <thead>
+                                    <tr>
+                                        <th>League Type</th>
+                                        <th>Entry Fee</th>
+                                        <th>Draft Date</th>
+                                        <th class="text-center">Join</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var league in Model.Leagues)
+                                    {
+                                        <tr>
+                                            <td>@(string.IsNullOrWhiteSpace(league.LeagueType) ? "League" : league.LeagueType)</td>
+                                            <td>@(league.EntryFee.HasValue? league.EntryFee.Value.ToString("C") : "Free")</td>
+                                            <td>@(league.DraftDate.HasValue? league.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt") : "TBD")</td>
+                                            <td class="text-center">
+                                                @if (!string.Equals(league.Status, "full", StringComparison.OrdinalIgnoreCase))
+                                                {
+                                                    <a href="/Leagues/Join/@league.LeagueId" class="league-join-btn">Join</a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="league-join-disabled">Full</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="league-cards d-block d-md-none">
+                            @foreach (var league in Model.Leagues)
+                            {
+                                <div class="league-card">
+                                    <div class="league-card__body">
+                                        <div class="league-card__row">
+                                            <span class="league-card__label">League Type</span>
+                                            <span class="league-card__value">@(string.IsNullOrWhiteSpace(league.LeagueType) ? "League" : league.LeagueType)</span>
+                                        </div>
+
+                                        <div class="league-card__row">
+                                            <span class="league-card__label">Entry Fee</span>
+                                            <span class="league-card__value">@(league.EntryFee.HasValue? league.EntryFee.Value.ToString("C") : "Free")</span>
+                                        </div>
+
+                                        <div class="league-card__row">
+                                            <span class="league-card__label">Draft Date</span>
+                                            <span class="league-card__value">@(league.DraftDate.HasValue? league.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt") : "TBD")</span>
+                                        </div>
+
+                                        <div class="league-card__row">
+                                            <span class="league-card__label">Best Ball</span>
+                                            <span class="league-card__value">@(league.BestBall ? "Yes" : "No")</span>
+                                        </div>
+
+                                        <div class="league-card__action">
+                                            @if (!string.Equals(league.Status, "full", StringComparison.OrdinalIgnoreCase))
+                                            {
+                                                <a href="/Leagues/Join/@league.LeagueId"
+                                                   class="league-join-btn league-join-btn--full">
+                                                    Join League
+                                                </a>
+                                            }
+                                            else
+                                            {
+                                                <span class="league-join-disabled">Full</span>
+                                            }
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="league-empty-state text-center">
+                            No leagues match your filters right now.
+                        </div>
+                    }
+
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+@await Html.PartialAsync("_SiteFooter")
+
+<style>
+    .site-header-solid,
+    .site-header-solid.sticky {
+        background: #fff !important;
+        border-bottom: 1px solid #e8e8e8 !important;
+        box-shadow: none !important;
+    }
+
+        .site-header-solid .header__right {
+            gap: 16px;
+        }
+
+        .site-header-solid .main-menu ul {
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+        }
+
+            .site-header-solid .main-menu ul li {
+                white-space: nowrap;
+            }
+
+                .site-header-solid .main-menu ul li a {
+                    font-size: 15px;
+                }
+
+                .site-header-solid .main-menu ul li:not(:last-child) {
+                    margin-right: 14px;
+                }
+
+        .site-header-solid .header__btn {
+            margin-left: 10px !important;
+            flex-shrink: 0;
+        }
+
+        .site-header-solid .main-menu {
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .site-header-solid .logo img {
+            max-height: 52px;
+            width: auto;
+        }
+        .site-header-solid .main-menu ul li a,
+        .site-header-solid.sticky .main-menu ul li a {
+            color: #111 !important;
+        }
+
+        .site-header-solid .main-menu ul li:not(:last-child) {
+            margin-right: 14px;
+        }
+
+        .site-header-solid .main-menu ul li a {
+            font-size: 15px;
+        }
+        .site-header-solid .sidebar-toggle-btn .line,
+        .site-header-solid.sticky .sidebar-toggle-btn .line {
+            background-color: #111 !important;
+        }
+
+        .site-header-solid .logo-white,
+        .site-header-solid.sticky .logo-white {
+            display: none !important;
+        }
+
+        .site-header-solid .logo-black,
+        .site-header-solid.sticky .logo-black {
+            display: inline-block !important;
+        }
+
+    .league-page {
+        padding-top: 10px;
+    }
+
+    .league-hero {
+        padding-top: 10px;
+        padding-bottom: 25px;
+    }
+
+    .league-hero__text {
+        max-width: 650px;
+        margin: 12px auto 0;
+        color: #666;
+    }
+
+    .league-filter-box {
+        background: #fff;
+        border: 1px solid #efefef;
+        border-radius: 16px;
+        box-shadow: 0 6px 22px rgba(0,0,0,0.04);
+        padding: 22px;
+    }
+
+    .league-filter-label {
+        display: block;
+        font-size: 13px;
+        font-weight: 700;
+        color: #444;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+    }
+
+    .league-filter-input {
+        width: 100%;
+        height: 48px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 0 14px;
+        font-size: 15px;
+        background: #fff;
+    }
+
+    .league-checkbox-wrap {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-height: 48px;
+    }
+
+    .league-checkbox-label {
+        margin: 0;
+        font-size: 15px;
+        color: #111;
+    }
+
+    .league-filter-actions {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+    }
+
+    .league-filter-btn {
+        display: inline-block;
+        border: none;
+        background: #111;
+        color: #fff;
+        border-radius: 10px;
+        height: 48px;
+        padding: 0 18px;
+        font-weight: 600;
+    }
+
+    .league-filter-reset {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+        padding: 0 16px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        color: #111;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .league-filter-reset:hover {
+            text-decoration: none;
+            color: #111;
+        }
+
+    .league-results-count {
+        font-size: 15px;
+        font-weight: 600;
+        color: #666;
+    }
+
+    .league-table-wrapper {
+        overflow-x: auto;
+        background: #fff;
+        border-radius: 16px;
+        box-shadow: 0 6px 22px rgba(0,0,0,0.06);
+        border: 1px solid #efefef;
+    }
+
+    .league-table {
+        width: 100%;
+        margin-bottom: 0;
+    }
+
+        .league-table thead th {
+            background: #f8f8f8;
+            font-weight: 700;
+            color: #111;
+            border-bottom: 1px solid #e9e9e9;
+            padding: 18px 16px;
+            white-space: nowrap;
+        }
+
+        .league-table td {
+            padding: 18px 16px;
+            vertical-align: middle;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        .league-table tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+    .league-join-btn {
+        display: inline-block;
+        padding: 10px 18px;
+        background: #111;
+        color: #fff;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        text-align: center;
+    }
+
+        .league-join-btn:hover {
+            background: #333;
+            color: #fff;
+            text-decoration: none;
+        }
+
+    .league-join-btn--full {
+        width: 100%;
+    }
+
+    .league-join-disabled {
+        color: #999;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .league-empty-state {
+        background: #fff;
+        border: 1px solid #efefef;
+        border-radius: 16px;
+        padding: 40px 20px;
+        box-shadow: 0 6px 22px rgba(0,0,0,0.04);
+    }
+
+    .league-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .league-card {
+        background: #fff;
+        border: 1px solid #efefef;
+        border-radius: 16px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.05);
+        overflow: hidden;
+    }
+
+    .league-card__body {
+        padding: 18px;
+    }
+
+    .league-card__row {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        margin-bottom: 14px;
+    }
+
+        .league-card__row:last-of-type {
+            margin-bottom: 18px;
+        }
+
+    .league-card__label {
+        font-size: 12px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        color: #777;
+    }
+
+    .league-card__value {
+        font-size: 16px;
+        color: #111;
+        line-height: 1.4;
+    }
+
+    .league-card__action {
+        margin-top: 6px;
+    }
+
+    @@media (max-width: 991px) {
+        .league-page {
+           padding-top: 5px;
+        }
+    }
+
+    @@media (max-width: 767px) {
+        .league-page {
+            padding-top: 5px;
+        }
+
+        .league-hero {
+
+            padding-bottom: 20px;
+        }
+
+        .league-filter-box {
+            padding: 16px;
+        }
+
+        .league-filter-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+        .league-filter-btn,
+        .league-filter-reset {
+            width: 100%;
+        }
+
+        .page__title-9 {
+            margin-bottom: 8px;
+        }
+
+        .league-hero__text {
+            font-size: 15px;
+        }
+
+        .league-page .page__title-9 {
+            color: #111 !important;
+        }
+    }
+</style>
+
+<script src="~/js/vendor/jquery-3.5.1.min.js"></script>
+<script src="~/js/vendor/waypoints.min.js"></script>
+<script src="~/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/jquery.meanmenu.js"></script>
+<script src="~/js/swiper-bundle.min.js"></script>
+<script src="~/js/owl.carousel.min.js"></script>
+<script src="~/js/jquery.fancybox.min.js"></script>
+<script src="~/js/isotope.pkgd.min.js"></script>
+<script src="~/js/parallax.min.js"></script>
+<script src="~/js/backToTop.js"></script>
+<script src="~/js/purecounter.js"></script>
+<script src="~/js/ajax-form.js"></script>
+<script src="~/js/wow.min.js"></script>
+<script src="~/js/imagesloaded.pkgd.min.js"></script>
+<script src="~/js/main.js"></script>
+<script src="~/js/overrides.js"></script>
