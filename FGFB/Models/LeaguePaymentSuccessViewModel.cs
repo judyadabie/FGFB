@@ -2,16 +2,11 @@
 {
     public class LeaguePaymentSuccessViewModel
     {
-        public string FirstName { get; set; } = "";
-        public string LastName { get; set; } = "";
+        public string LeagueType { get; set; } = "";
+        public decimal? EntryFee { get; set; }
+        public DateTime? DraftDate { get; set; }
         public string Email { get; set; } = "";
-        public string LeagueName { get; set; } = "";
-
-        public decimal BaseFee { get; set; }
-        public decimal ConvenienceFee { get; set; }
-        public decimal TotalFee { get; set; }
-
-        public string LeagueUrl { get; set; } = "";
-        public DateTime? PaidUtc { get; set; }
+        public string LeagueLink { get; set; } = "";
+        public string PaymentStatus { get; set; } = "";
     }
 }

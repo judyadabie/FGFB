@@ -1,0 +1,36 @@
+﻿@model FGFB.Models.LeaguePaymentSuccessViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Payment Success";
+}
+
+@await Html.PartialAsync("_SiteHeader")
+
+<h1>Thanks for signing up!</h1>
+
+@if (Model.PaymentStatus == "Processing")
+{
+    <p>Your payment is still being processed. Please refresh this page in a moment.</p>
+}
+else
+{
+    <p>Your payment was successful.</p>
+
+    <p><strong>League Type:</strong> @Model.LeagueType</p>
+    <p><strong>Entry Fee:</strong> @(Model.EntryFee.HasValue? Model.EntryFee.Value.ToString("C") : "N/A")</p>
+    <p><strong>Draft Date:</strong> @(Model.DraftDate.HasValue? Model.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt") : "TBD")</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+
+    @if (!string.IsNullOrWhiteSpace(Model.LeagueLink))
+    {
+        <p>
+            <strong>League Link:</strong>
+            <a href="@Model.LeagueLink" target="_blank">Access Your League</a>
+        </p>
+    }
+
+    <p>You should also receive an email with your league details.</p>
+}
+
+@await Html.PartialAsync("_SiteFooter")
