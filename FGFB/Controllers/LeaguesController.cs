@@ -276,46 +276,39 @@ namespace FGFB.Controllers
         [HttpGet]
         public async Task<IActionResult> PaymentSuccess(string session_id)
         {
-            if (string.IsNullOrWhiteSpace(session_id))
+            if (string.IsNullOrWhiteSpace(session_id)) return BadRequest();
+
+            try
             {
-                return View(new LeaguePaymentSuccessViewModel
+                var result = await _registrationService.ProcessSessionAndReturnAsync(session_id);
+
+                if (result == null)
                 {
-                    PaymentStatus = "Processing"
-                });
-            }
+                    return View(new LeaguePaymentSuccessViewModel
+                    {
+                        PaymentStatus = "Processing"
+                    });
+                }
 
-            var registration = await _context.LeagueRegistrations
-                .FirstOrDefaultAsync(r => r.StripeSessionId == session_id);
+                var registration = result.Value.Registration;
+                var league = result.Value.League;
 
-            if (registration == null)
-            {
-                await _registrationService.ProcessSession(session_id);
-
-                registration = await _context.LeagueRegistrations
-                    .FirstOrDefaultAsync(r => r.StripeSessionId == session_id);
-            }
-
-            if (registration == null)
-            {
-                return View(new LeaguePaymentSuccessViewModel
+                var vm = new LeaguePaymentSuccessViewModel
                 {
-                    PaymentStatus = "Processing"
-                });
+                    LeagueType = league.LeagueType ?? "League",
+                    EntryFee = registration.EntryFee,
+                    DraftDate = league.DraftDate,
+                    Email = registration.Email,
+                    LeagueLink = registration.LeagueLink ?? "",
+                    PaymentStatus = registration.PaymentStatus
+                };
+
+                return View(vm);
             }
-
-            var league = await _context.Leagues.FirstAsync(l => l.LeagueId == registration.LeagueId);
-
-            var vm = new LeaguePaymentSuccessViewModel
+            catch (Exception ex)
             {
-                LeagueType = league.LeagueType ?? "League",
-                EntryFee = registration.EntryFee,
-                DraftDate = league.DraftDate,
-                Email = registration.Email,
-                LeagueLink = registration.LeagueLink ?? "",
-                PaymentStatus = registration.PaymentStatus
-            };
-
-            return View(vm);
+                return Content(ex.ToString(), "text/plain");
+            }
         }
 
         private async Task<bool> EmailExistsInMailchimp(string email)
