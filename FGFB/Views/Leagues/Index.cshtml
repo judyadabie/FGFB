@@ -146,7 +146,16 @@
 
                                         <div class="league-card__row">
                                             <span class="league-card__label">Entry Fee</span>
-                                            <span class="league-card__value">@(league.EntryFee.HasValue? league.EntryFee.Value.ToString("C") : "Free")</span>
+                                            <span class="league-card__value">
+                                            @if (league.EntryFee.HasValue && league.EntryFee.Value > 0)
+                                            {
+                                                @league.EntryFee.Value.ToString("C")
+                                            }
+                                            else
+                                            {
+                                                <span class="leagues-flow-free">FREE</span>
+                                            }
+                                        </span>
                                         </div>
 
                                         <div class="league-card__row">

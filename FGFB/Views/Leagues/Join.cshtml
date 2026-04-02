@@ -4,9 +4,9 @@
     Layout = "_Layout";
     ViewData["Title"] = "Join League";
 
-    var entryFeeText = Model.EntryFee.HasValue
-        ? Model.EntryFee.Value.ToString("C")
-        : "Free";
+    var entryFeeText = Model.EntryFee.HasValue && Model.EntryFee.Value > 0
+    ? Model.EntryFee.Value.ToString("C")
+    : "FREE";
 
     var draftDateText = Model.DraftDate.HasValue
         ? Model.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt")
@@ -21,16 +21,32 @@
     <div class="leagues-flow-card">
         <h1 class="leagues-flow-title">Join League</h1>
         <p class="leagues-flow-subtitle">
-            Enter the email address you used to register with Fan Girl Football.
-            This must match your Fan Girl Football member email address.
-        </p>
+            Enter the email address you used to register with Fan Girl Football.</br>
+            <b>This must match your Fan Girl Football member email address.</b></br>
+            Not a member yet?
+          <a href="https://fan-girl-football.mn.co/"
+   target="_blank"
+   rel="noopener"
+   class="leagues-flow-cta-link">
+    Sign up for free →
+</a>
+        </p></br>
 
         <div class="leagues-flow-details">
             <div class="leagues-flow-label">League Type</div>
             <div class="leagues-flow-value">@Model.LeagueType</div>
 
-            <div class="leagues-flow-label">Entry Fee</div>
-            <div class="leagues-flow-value">@entryFeeText</div>
+           <div class="leagues-flow-label">Entry Fee</div>
+            <div class="leagues-flow-value">
+                @if (Model.EntryFee.HasValue && Model.EntryFee.Value > 0)
+                {
+                    @Model.EntryFee.Value.ToString("C")
+                }
+                else
+                {
+                    <span class="leagues-flow-free">FREE</span>
+                }
+            </div>
 
             <div class="leagues-flow-label">Draft Date</div>
             <div class="leagues-flow-value">@draftDateText</div>
@@ -38,12 +54,7 @@
 
         <hr class="leagues-flow-divider" />
 
-        <p class="leagues-flow-note">
-            Not a member yet?
-            <a href="https://fan-girl-football.mn.co/" target="_blank" rel="noopener">
-                Sign up for free
-            </a>
-        </p>
+       
 
         @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
         {
