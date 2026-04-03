@@ -1,37 +1,55 @@
 ﻿<!DOCTYPE html>
-<html class="no-js" lang="zxx">
 
+<html class="no-js" lang="zxx">
 <head>
     <!-- Google Tag Manager -->
     <script>
         (function (w, d, s, l, i) {
-            w[l] = w[l] || []; w[l].push({
-                'gtm.start':
-                    new Date().getTime(), event: 'gtm.js'
-            }); var f = d.getElementsByTagName(s)[0],
-                j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : ''; j.async = true; j.src =
-                    'https://www.googletagmanager.com/gtm.js?id=' + i + dl; f.parentNode.insertBefore(j, f);
+            w[l] = w[l] || [];
+            w[l].push({
+                'gtm.start': new Date().getTime(),
+                event: 'gtm.js'
+            });
+            var f = d.getElementsByTagName(s)[0],
+                j = d.createElement(s),
+                dl = l != 'dataLayer' ? '&l=' + l : '';
+            j.async = true;
+            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+            f.parentNode.insertBefore(j, f);
         })(window, document, 'script', 'dataLayer', 'GTM-KGBDPDSN');
     </script>
-    <!-- End Google Tag Manager -->
-    <!-- Google tag (gtag.js) -->
+
+    ```
+    <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-YBY8DGS692"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-
         gtag('config', 'G-YBY8DGS692');
     </script>
-    <script id="mcjs">!function (c, h, i, m, p) { m = c.createElement(h), p = c.getElementsByTagName(h)[0], m.async = 1, m.src = i, p.parentNode.insertBefore(m, p) }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/769dd96d7de3ee73d6c778a42/99d8e13bf4042a26957628b74.js");</script>
+
+    <!-- Mailchimp -->
+    <script id="mcjs">
+        !function (c, h, i, m, p) {
+            m = c.createElement(h),
+            p = c.getElementsByTagName(h)[0],
+            m.async = 1,
+            m.src = i,
+            p.parentNode.insertBefore(m, p)
+        }(document, "script", "https://chimpstatic.com/mcjs-connected/js/users/769dd96d7de3ee73d6c778a42/99d8e13bf4042a26957628b74.js");
+    </script>
+
     <meta charset="utf-8">
     <meta http-equiv="x-ua-compatible" content="ie=edge">
     <meta name="keywords" content="@ViewData["MetaKeywords"]">
     <title>@ViewData["Title"]</title>
     <meta name="description" content="@ViewData["MetaDescription"]">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="shortcut icon" type="image/x-icon" href="img/favicon.png">
 
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="~/css/preloader.css">
     <link rel="stylesheet" href="~/css/bootstrap.min.css">
     <link rel="stylesheet" href="~/css/meanmenu.css">
@@ -45,20 +63,28 @@
     <link rel="stylesheet" href="~/css/default.css">
     <link rel="stylesheet" href="~/css/style.css">
 
-    <!-- Meta Pixel Code -->
+    <!-- jQuery -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!-- Facebook Pixel -->
     <script>
         !function (f, b, e, v, n, t, s) {
-            if (f.fbq) return; n = f.fbq = function () {
-                n.callMethod ?
-                    n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            if (f.fbq) return;
+            n = f.fbq = function () {
+                n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
             };
-            if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0';
-            n.queue = []; t = b.createElement(e); t.async = !0;
-            t.src = v; s = b.getElementsByTagName(e)[0];
-            s.parentNode.insertBefore(t, s)
-        }(window, document, 'script',
-            'https://connect.facebook.net/en_US/fbevents.js');
+            if (!f._fbq) f._fbq = n;
+            n.push = n;
+            n.loaded = !0;
+            n.version = '2.0';
+            n.queue = [];
+            t = b.createElement(e);
+            t.async = !0;
+            t.src = v;
+            s = b.getElementsByTagName(e)[0];
+            s.parentNode.insertBefore(t, s);
+        }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+
         fbq('init', '1584601135558175');
         fbq('track', 'PageView');
     </script>
@@ -66,37 +92,28 @@
         <img height="1" width="1" style="display:none"
              src="https://www.facebook.com/tr?id=1584601135558175&ev=PageView&noscript=1" />
     </noscript>
-    <!-- End Meta Pixel Code -->
-    <!-- Nextdoor Pixel Code -->
-    <script type='text/javascript'>
-        !function (e, n) {
-            var t, p; e.ndp || ((t = e.ndp = function () {
-                t.handleRequest ? t.handleRequest.apply(t, arguments) : t.queue.push(arguments)
-            }).queue = [], t.v = 1, (p = n.createElement(e = "script")).async = !0,
-                p.src = "https://ads.nextdoor.com/public/pixel/ndp.js?id=c674926d-decd-4b71-b5b3-15b7c15f5af2",
-                (n = n.getElementsByTagName(e)[0]).parentNode.insertBefore(p, n))
-        }(window, document);
+    ```
 
-        ndp('init', 'c674926d-decd-4b71-b5b3-15b7c15f5af2', {});
-        ndp('track', 'PAGE_VIEW');
-    </script>
-    <noscript>
-        <img height="1" width="1" style="display:none"
-             src="https://flask.nextdoor.com/pixel?pid=c674926d-decd-4b71-b5b3-15b7c15f5af2&ev=PAGE_VIEW&noscript=1" />
-    </noscript>
-    <!-- End Nextdoor Pixel Code -->
 </head>
 
 <body>
+
+    ```
     <partial name="_CookieConsentPartial" />
 
-    <!-- Google Tag Manager (noscript) -->
+    <!-- GTM noscript -->
     <noscript>
         <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KGBDPDSN"
                 height="0" width="0" style="display:none;visibility:hidden"></iframe>
     </noscript>
-    <!-- End Google Tag Manager (noscript) -->
+
+    <!-- Header -->
+    <partial name="_SiteHeader" />
+
+    <!-- Page Content -->
     @RenderBody()
+
+    <!-- JS -->
     <script src="~/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/jquery.meanmenu.js"></script>
     <script src="~/js/owl.carousel.min.js"></script>
@@ -112,7 +129,7 @@
     <script src="~/js/overrides.js"></script>
 
     @RenderSection("Scripts", required: false)
+    ```
 
 </body>
-
 </html>
