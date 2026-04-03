@@ -111,7 +111,35 @@ namespace FGFB.Services
 
             return (registration, league);
         }
+        public async Task<LeagueRegistration> CreateFreeRegistrationAsync(long leagueId, string email)
+        {
+            var league = await _context.Leagues.FindAsync(leagueId);
+            if (league == null)
+                throw new InvalidOperationException("League not found.");
 
+            var existing = await _context.LeagueRegistrations
+                .FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Email == email);
+
+            if (existing != null)
+                return existing;
+
+            var reg = new LeagueRegistration
+            {
+                LeagueId = leagueId,
+                Email = email,
+                LeagueLink = league.JoinLink,
+                PaymentStatus = "Registered",
+                EntryFee = 0m,
+                ProcessingFee = 0m,
+                TotalPaid = 0m,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            _context.LeagueRegistrations.Add(reg);
+            await _context.SaveChangesAsync();
+
+            return reg;
+        }
         private async Task SendLeagueAccessEmailAsync(
             string toEmail,
             League league,

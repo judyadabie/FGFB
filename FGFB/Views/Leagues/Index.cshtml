@@ -6,7 +6,7 @@
     ViewData["MetaDescription"] = "Browse Fan Girl Football leagues and join the one that fits you best.";
     ViewData["MetaKeywords"] = "fantasy football leagues, Fan Girl Football, women fantasy football leagues, wbna leagues";
 }
-
+<link rel="stylesheet" href="~/css/leagues-flow.css" asp-append-version="true" />
 <div id="loading">
     <div id="loading-center">
         <div id="loading-center-absolute">
@@ -116,7 +116,16 @@
                                     {
                                         <tr>
                                             <td>@(string.IsNullOrWhiteSpace(league.LeagueType) ? "League" : league.LeagueType)</td>
-                                            <td>@(league.EntryFee.HasValue? league.EntryFee.Value.ToString("C") : "Free")</td>
+                                            <td><span class="league-card__value">
+                                                @if (league.EntryFee.HasValue && league.EntryFee.Value > 0)
+                                                {
+                                                    @league.EntryFee.Value.ToString("C")
+                                                }
+                                                else
+                                                {
+                                                    <span class="leagues-flow-free">FREE</span>
+                                                }
+                                            </span></td>
                                             <td>@(league.DraftDate.HasValue? league.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt") : "TBD")</td>
                                             <td class="text-center">
                                                 @if (!string.Equals(league.Status, "full", StringComparison.OrdinalIgnoreCase))

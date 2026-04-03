@@ -179,6 +179,16 @@ namespace FGFB.Controllers
                 return View(vm);
             }
 
+            if (!league.EntryFee.HasValue || league.EntryFee.Value <= 0)
+            {
+                var registration = await _registrationService.CreateFreeRegistrationAsync(vm.LeagueId, vm.Email!);
+
+                return RedirectToAction(nameof(RegistrationSuccess), new
+                {
+                    registrationId = registration.RegistrationId
+                });
+            }
+
             return RedirectToAction(nameof(Payment), new { id = vm.LeagueId, email = vm.Email });
         }
 
@@ -278,39 +288,50 @@ namespace FGFB.Controllers
         {
             if (string.IsNullOrWhiteSpace(session_id)) return BadRequest();
 
-            try
+            var result = await _registrationService.ProcessSessionAndReturnAsync(session_id);
+
+            if (result == null)
             {
-                var result = await _registrationService.ProcessSessionAndReturnAsync(session_id);
-
-                if (result == null)
+                return View("RegistrationSuccess", new LeaguePaymentSuccessViewModel
                 {
-                    return View(new LeaguePaymentSuccessViewModel
-                    {
-                        PaymentStatus = "Processing"
-                    });
-                }
-
-                var registration = result.Value.Registration;
-                var league = result.Value.League;
-
-                var vm = new LeaguePaymentSuccessViewModel
-                {
-                    LeagueType = league.LeagueType ?? "League",
-                    EntryFee = registration.EntryFee,
-                    DraftDate = league.DraftDate,
-                    Email = registration.Email,
-                    LeagueLink = registration.LeagueLink ?? "",
-                    PaymentStatus = registration.PaymentStatus
-                };
-
-                return View(vm);
+                    PaymentStatus = "Processing"
+                });
             }
-            catch (Exception ex)
+
+            var registration = result.Value.Registration;
+
+            return RedirectToAction(nameof(RegistrationSuccess), new
             {
-                return Content(ex.ToString(), "text/plain");
-            }
+                registrationId = registration.RegistrationId
+            });
         }
+        [HttpGet]
+        public async Task<IActionResult> RegistrationSuccess(long registrationId)
+        {
+            var registration = await _context.LeagueRegistrations
+                .FirstOrDefaultAsync(r => r.RegistrationId == registrationId);
 
+            if (registration == null)
+                return NotFound();
+
+            var league = await _context.Leagues
+                .FirstOrDefaultAsync(l => l.LeagueId == registration.LeagueId);
+
+            if (league == null)
+                return NotFound();
+
+            var vm = new LeaguePaymentSuccessViewModel
+            {
+                LeagueType = league.LeagueType ?? "League",
+                EntryFee = registration.EntryFee,
+                DraftDate = league.DraftDate,
+                Email = registration.Email,
+                LeagueLink = registration.LeagueLink ?? "",
+                PaymentStatus = registration.PaymentStatus
+            };
+
+            return View("RegistrationSuccess", vm);
+        }
         private async Task<bool> EmailExistsInMailchimp(string email)
         {
             var client = _httpClientFactory.CreateClient();

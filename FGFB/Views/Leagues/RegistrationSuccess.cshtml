@@ -1,0 +1,76 @@
+﻿@model FGFB.Models.LeaguePaymentSuccessViewModel
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "League Registration";
+}
+
+<link rel="stylesheet" href="~/css/leagues-flow.css" asp-append-version="true" />
+
+@await Html.PartialAsync("_SiteHeader")
+
+<div class="leagues-flow-page">
+    <div class="leagues-flow-card">
+        <h1 class="leagues-flow-title">You’re In!</h1>
+
+        @if (Model.PaymentStatus == "Processing")
+        {
+            <div class="leagues-flow-status">
+                Your registration is still being processed. Please refresh this page in a moment.
+            </div>
+        }
+        else
+        {
+            <p class="leagues-flow-subtitle">
+                Your league registration is complete.
+            </p>
+
+            <div class="leagues-flow-details">
+                <div class="leagues-flow-label">League Type</div>
+                <div class="leagues-flow-value">@Model.LeagueType</div>
+
+                <div class="leagues-flow-label">Entry Fee</div>
+                <div class="leagues-flow-value">
+                    @if (Model.EntryFee.HasValue && Model.EntryFee.Value > 0)
+                    {
+                        @Model.EntryFee.Value.ToString("C")
+                    }
+                    else
+                    {
+                        <span class="leagues-flow-free">FREE</span>
+                    }
+            </div>
+
+            <div class="leagues-flow-label">Draft Date</div>
+            <div class="leagues-flow-value">
+                @(Model.DraftDate.HasValue
+                                ? Model.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt")
+                                : "TBD")
+            </div>
+
+                <div class="leagues-flow-label">Email</div>
+                <div class="leagues-flow-value">@Model.Email</div>
+            </div>
+
+            <hr class="leagues-flow-divider" />
+
+        @if (!string.IsNullOrWhiteSpace(Model.LeagueLink))
+            {
+                <div class="leagues-flow-actions">
+                    <a href="@Model.LeagueLink"
+                       target="_blank"
+                       rel="noopener"
+                       class="leagues-flow-button">
+                        Go to Your League
+                    </a>
+                </div>
+            }
+
+            <p class="leagues-flow-help">
+                Save this link in case you want quick access later.
+            </p>
+        }
+    </div>
+</div>
+
+@await Html.PartialAsync("_SiteFooter")
