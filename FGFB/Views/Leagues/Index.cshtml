@@ -5,8 +5,321 @@
     ViewData["Title"] = "Leagues";
     ViewData["MetaDescription"] = "Browse Fan Girl Football leagues and join the one that fits you best.";
     ViewData["MetaKeywords"] = "fantasy football leagues, Fan Girl Football, women fantasy football leagues, wbna leagues";
+    
+    var wnbaRulesMessage = @"
+<div class='league-info-content'>
+
+    <h3 class='league-info-heading'>WNBA Fantasy Rules</h3>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>League Format</h4>
+    <ul>
+        <li>8 Teams</li>
+        <li>Head-to-Head Points</li>
+        <li>Weekly Matchups</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Roster</h4>
+    <ul>
+        <li>9 Total Players</li>
+        <li>2 Guards (G)</li>
+        <li>3 Forwards/Centers (F/C)</li>
+        <li>1 Utility (UTIL)</li>
+        <li>3 Bench (includes 1 IR)</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Scoring</h4>
+    <ul>
+        <li>Points: 1</li>
+        <li>Rebounds: 1</li>
+        <li>Assists: 1</li>
+        <li>3PT Made: 1</li>
+        <li>Steals: 2</li>
+        <li>Blocks: 2</li>
+    </ul>
+
+    <p><em>Defensive stats (steals and blocks) are worth more.</em></p>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Draft</h4>
+    <ul>
+        <li>Snake Draft</li>
+        <li>Random Order</li>
+        <li>90 Seconds Per Pick</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Lineups & Waivers</h4>
+    <ul>
+        <li>Daily lineup changes</li>
+        <li>Players lock at game time</li>
+        <li>Waivers process after 1 day</li>
+        <li>7 acquisitions per matchup</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Trades</h4>
+    <ul>
+        <li>Unlimited trades</li>
+        <li>No review period</li>
+        <li>Deadline: July 17</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Playoffs</h4>
+    <ul>
+        <li>Top 4 teams qualify</li>
+        <li>2-week playoff matchups</li>
+        <li>No reseeding</li>
+    </ul>
+
+</div>";
+    var refundPolicyMessage = @"
+<div class='league-info-content'>
+
+    <h3 class='league-info-heading'>Refund Policy</h3>
+
+    <hr class='league-info-divider' />
+
+    <p>
+        Fan Girl Football aims to provide a fair and competitive experience for all participants.
+        Please review our refund policy carefully before joining a league.
+    </p>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Full Refunds</h4>
+    <p>
+        Full refunds will be issued if:
+    </p>
+    <ul>
+        <li>The league is canceled by Fan Girl Football</li>
+        <li>The league does not fill and cannot be run</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Limited Refunds</h4>
+    <p>
+        Refund requests submitted before the league is full or before the draft is scheduled
+        may be approved at our discretion.
+    </p>
+    <p>
+        Approved refunds will be issued minus any non-refundable payment processing fees.
+    </p>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>No Refunds</h4>
+    <ul>
+        <li>After the league is full</li>
+        <li>After a draft date is scheduled</li>
+        <li>After the draft has taken place</li>
+        <li>Due to change of mind or inability to participate</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>League Transfers</h4>
+    <p>
+        In some cases, participants may transfer their entry to another league or another player
+        instead of requesting a refund.
+    </p>
+
+    <hr class='league-info-divider' />
+
+    <p>
+        <strong>Need help?</strong><br />
+        Email <a href='mailto:help@fangirlfootball.com'>help@fangirlfootball.com</a>
+    </p>
+
+</div>";
+    var prizesMessage = @"
+<div class='league-info-content'>
+    <h3 class='league-info-heading'>Prizes</h3>
+
+    <hr class='league-info-divider' />
+
+    <p>
+        All league payouts will be administered through Venmo, Paypal or Zelle.
+        Payouts will be sent to the winners' account choice within 10 days of the completion
+        of the league.
+    </p>
+
+    <hr class='league-info-divider' />
+
+    <div class='table-responsive'>
+        <table class='table league-prizes-table'>
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>1st</th>
+                    <th>2nd</th>
+                    <th>3rd</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>$25 - 8 Team League</td>
+                    <td>$120</td>
+                    <td>$60</td>
+                    <td>$20</td>
+                </tr>
+                <tr>
+                    <td>$25 - 12 Team League</td>
+                    <td>$180</td>
+                    <td>$90</td>
+                    <td>$30</td>
+                </tr>
+                <tr>
+                    <td>$50 - 8 Team League</td>
+                    <td>$240</td>
+                    <td>$120</td>
+                    <td>$40</td>
+                </tr>
+                <tr>
+                    <td>$50 - 12 Team League</td>
+                    <td>$360</td>
+                    <td>$180</td>
+                    <td>$60</td>
+                </tr>
+                <tr>
+                    <td>$100 - 12 Team League</td>
+                    <td>$720</td>
+                    <td>$360</td>
+                    <td>$120</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <hr class='league-info-divider' />
+
+</div>";
+    var signUpInfoMessage = @"
+<div class='league-info-content'>
+
+    <h3 class='league-info-heading'>Sign Up Info</h3>
+
+    <hr class='league-info-divider' />
+
+    <ol class='league-info-steps'>
+        <li>
+            Join the Fan Girl Football Community at
+           <a href='https://fan-girl-football.mn.co/' target = '_blank'
+   rel = 'noopener'
+   class= 'leagues-flow-cta-link' >
+    Sign up for free →
+</a>
+        </li>
+        <li>Choose your league type and click <strong>Join</strong></li>
+        <li>Enter the email address associated with your Fan Girl Football membership</li>
+        <li>Pay any entry fees (if applicable)</li>
+        <li>Get your league link and join your league</li>
+    </ol>
+
+    <hr class='league-info-divider' />
+
+    <p>
+        <strong>Need help?</strong><br />
+        Email <a href='mailto:help@fangirlfootball.com'>help@fangirlfootball.com</a>
+    </p>
+
+    <hr class='league-info-divider' />
+
+    <p>
+        You must be a member of Fan Girl Football to participate.<br />
+        Fan Girl Football is a women-focused community — non-compliant users will be removed.
+    </p>
+
+    <hr class='league-info-divider' />
+
+    <div class='league-info-links'>
+        <p><strong>Rules:</strong></p>
+        <ul>
+            <li>WNBA Fantasy Rules</li>
+            <li>Best Ball Fantasy Rules (Football)</li>
+        </ul>
+    </div>
+
+</div>";
+    var bestBallRulesMessage = @"
+<div class='league-info-content'>
+
+    <h3 class='league-info-heading'>Best Ball Fantasy Rules</h3>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Format</h4>
+    <ul>
+        <li>Total points format</li>
+        <li>Not head-to-head</li>
+        <li>Your highest-scoring lineup is automatically optimized each week</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Offensive Scoring</h4>
+    <ul>
+        <li>Passing TD: 4 points</li>
+        <li>Passing Yards: 0.04 points per yard (25 yards = 1 point)</li>
+        <li>Interception: -1 point</li>
+        <li>Rushing TD: 6 points</li>
+        <li>Rushing Yards: 0.1 points per yard (10 yards = 1 point)</li>
+        <li>Receiving TD: 6 points</li>
+        <li>Receiving Yards: 0.1 points per yard (10 yards = 1 point)</li>
+        <li>Reception: 1 point (PPR)</li>
+        <li>Fumble Lost: -1 point</li>
+        <li>2-Point Conversion: 2 points (pass, run, or catch)</li>
+        <li>Offensive Fumble Recovery TD: 6 points</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Milestone Bonuses</h4>
+    <p>Bonus points are awarded for big performances:</p>
+    <ul>
+        <li>300+ Passing Yard Game: 3 bonus points</li>
+        <li>100+ Rushing Yard Game: 3 bonus points</li>
+        <li>100+ Receiving Yard Game: 3 bonus points</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Defense / Special Teams (DST) Scoring</h4>
+    <ul>
+        <li>Sack: 1 point</li>
+        <li>Interception or Fumble Recovery: 2 points</li>
+        <li>Safety or Blocked Kick: 2 points</li>
+        <li>Defensive / Special Teams TD: 6 points</li>
+    </ul>
+
+    <hr class='league-info-divider' />
+
+    <h4 class='league-info-subheading'>Points Allowed</h4>
+    <ul>
+        <li>0 points allowed: 10 points</li>
+        <li>1 to 6 points allowed: 7 points</li>
+        <li>7 to 13 points allowed: 4 points</li>
+        <li>14 to 20 points allowed: 1 point</li>
+        <li>21 to 27 points allowed: 0 points</li>
+        <li>28 to 34 points allowed: -1 point</li>
+        <li>35+ points allowed: -4 points</li>
+    </ul>
+
+</div>";
 }
 <link rel="stylesheet" href="~/css/leagues-flow.css" asp-append-version="true" />
+
 <div id="loading">
     <div id="loading-center">
         <div id="loading-center-absolute">
@@ -19,7 +332,6 @@
         </div>
     </div>
 </div>
-
 
 <main class="league-page">
     <section class="league-hero">
@@ -84,6 +396,50 @@
                             </div>
                         </form>
                     </div>
+
+                    <div class="league-info-bar">
+                        <button type="button"
+                                class="league-info-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#infoModal"
+                                data-title="Prizes"
+                                data-body="@prizesMessage">
+                            Prizes
+                        </button>
+
+                        <button type="button"
+                                class="league-info-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#infoModal"
+                                data-title="Sign Up Info"
+                                data-body="@signUpInfoMessage">
+                            Sign Up Info
+                        </button>
+                        <button type="button"
+                                class="league-info-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#infoModal"
+                                data-title="Refund Policy"
+                                data-body="@refundPolicyMessage">
+                            Refund Policy
+                        </button>
+                        <button type="button"
+                                class="league-info-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#infoModal"
+                                data-title="WNBA Rules"
+                                data-body="@wnbaRulesMessage">
+                            WNBA Rules
+                        </button>
+                        <button type="button"
+                                class="league-info-btn"
+                                data-bs-toggle="modal"
+                                data-bs-target="#infoModal"
+                                data-title="Best Ball Rules"
+                                data-body="@bestBallRulesMessage">
+                            Best Ball Rules
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -115,16 +471,18 @@
                                     {
                                         <tr>
                                             <td>@(string.IsNullOrWhiteSpace(league.LeagueType) ? "League" : league.LeagueType)</td>
-                                            <td><span class="league-card__value">
-                                                @if (league.EntryFee.HasValue && league.EntryFee.Value > 0)
-                                                {
-                                                    @league.EntryFee.Value.ToString("C")
-                                                }
-                                                else
-                                                {
-                                                    <span class="leagues-flow-free">FREE</span>
-                                                }
-                                            </span></td>
+                                            <td>
+                                                <span class="league-card__value">
+                                                    @if (league.EntryFee.HasValue && league.EntryFee.Value > 0)
+                                                    {
+                                                        @league.EntryFee.Value.ToString("C")
+                                                    }
+                                                    else
+                                                    {
+                                                        <span class="leagues-flow-free">FREE</span>
+                                                    }
+                                                </span>
+                                            </td>
                                             <td>@(league.DraftDate.HasValue? league.DraftDate.Value.ToString("MMMM dd, yyyy h:mm tt") : "TBD")</td>
                                             <td class="text-center">
                                                 @if (!string.Equals(league.Status, "full", StringComparison.OrdinalIgnoreCase))
@@ -155,15 +513,15 @@
                                         <div class="league-card__row">
                                             <span class="league-card__label">Entry Fee</span>
                                             <span class="league-card__value">
-                                            @if (league.EntryFee.HasValue && league.EntryFee.Value > 0)
-                                            {
-                                                @league.EntryFee.Value.ToString("C")
-                                            }
-                                            else
-                                            {
-                                                <span class="leagues-flow-free">FREE</span>
-                                            }
-                                        </span>
+                                                @if (league.EntryFee.HasValue && league.EntryFee.Value > 0)
+                                                {
+                                                    @league.EntryFee.Value.ToString("C")
+                                                }
+                                                else
+                                                {
+                                                    <span class="leagues-flow-free">FREE</span>
+                                                }
+                                            </span>
                                         </div>
 
                                         <div class="league-card__row">
@@ -207,9 +565,82 @@
     </section>
 </main>
 
+<div class="modal fade" id="infoModal" tabindex="-1" aria-labelledby="infoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content league-info-modal">
+            <div class="modal-header">
+                <h5 class="modal-title" id="infoModalLabel">Details</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="infoModalBody">
+            </div>
+        </div>
+    </div>
+</div>
+
 @await Html.PartialAsync("_SiteFooter")
 
 <style>
+    .league-info-subheading {
+        font-size: 16px;
+        font-weight: 700;
+        margin-bottom: 6px;
+        color: #111;
+    }
+    .league-info-steps {
+        padding-left: 18px;
+        margin-bottom: 0;
+    }
+
+        .league-info-steps li {
+            margin-bottom: 10px;
+            line-height: 1.5;
+        }
+
+    .league-info-links ul {
+        padding-left: 18px;
+        margin-bottom: 0;
+    }
+
+    .league-info-links li {
+        margin-bottom: 6px;
+    }
+    .league-info-heading {
+        font-size: 24px;
+        font-weight: 700;
+        margin-bottom: 0;
+        color: #111;
+    }
+
+    .league-info-divider {
+        border: 0;
+        border-top: 1px solid #ddd;
+        margin: 18px 0;
+        opacity: 1;
+    }
+
+    .league-prizes-table {
+        margin-bottom: 0;
+    }
+
+        .league-prizes-table th,
+        .league-prizes-table td {
+            padding: 10px 12px;
+            border: 1px solid #e9e9e9;
+            text-align: left;
+            vertical-align: middle;
+            font-size: 14px;
+        }
+
+        .league-prizes-table thead th {
+            background: #f8f8f8;
+            font-weight: 700;
+            color: #111;
+        }
+
+    .league-info-content p {
+        margin-bottom: 0;
+    }
     .site-header-solid,
     .site-header-solid.sticky {
         background: #fff !important;
@@ -253,18 +684,12 @@
             max-height: 52px;
             width: auto;
         }
+
         .site-header-solid .main-menu ul li a,
         .site-header-solid.sticky .main-menu ul li a {
             color: #111 !important;
         }
 
-        .site-header-solid .main-menu ul li:not(:last-child) {
-            margin-right: 14px;
-        }
-
-        .site-header-solid .main-menu ul li a {
-            font-size: 15px;
-        }
         .site-header-solid .sidebar-toggle-btn .line,
         .site-header-solid.sticky .sidebar-toggle-btn .line {
             background-color: #111 !important;
@@ -371,6 +796,13 @@
             color: #111;
         }
 
+    .league-info-bar {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 16px;
+    }
+
     .league-results-count {
         font-size: 15px;
         font-weight: 600;
@@ -430,6 +862,26 @@
     .league-join-btn--full {
         width: 100%;
     }
+
+    .league-info-btn {
+        display: inline-block;
+        padding: 10px 18px;
+        background: #fff;
+        color: #111;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+        font-weight: 600;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        text-align: center;
+        cursor: pointer;
+    }
+
+        .league-info-btn:hover {
+            background: #111;
+            color: #fff;
+            border-color: #111;
+        }
 
     .league-join-disabled {
         color: #999;
@@ -492,9 +944,19 @@
         margin-top: 6px;
     }
 
+    .league-info-modal .modal-content {
+        border-radius: 16px;
+    }
+
+    .league-info-modal .modal-body {
+        font-size: 15px;
+        line-height: 1.7;
+        color: #222;
+    }
+
     @@media (max-width: 991px) {
         .league-page {
-           padding-top: 5px;
+            padding-top: 5px;
         }
     }
 
@@ -504,7 +966,6 @@
         }
 
         .league-hero {
-
             padding-bottom: 20px;
         }
 
@@ -519,6 +980,14 @@
 
         .league-filter-btn,
         .league-filter-reset {
+            width: 100%;
+        }
+
+        .league-info-bar {
+            flex-direction: column;
+        }
+
+        .league-info-btn {
             width: 100%;
         }
 
@@ -552,3 +1021,37 @@
 <script src="~/js/imagesloaded.pkgd.min.js"></script>
 <script src="~/js/main.js"></script>
 <script src="~/js/overrides.js"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const infoModal = document.getElementById("infoModal");
+
+        if (infoModal) {
+            infoModal.addEventListener("show.bs.modal", function (event) {
+                const button = event.relatedTarget;
+                const title = button.getAttribute("data-title") || "Details";
+                const body = button.getAttribute("data-body") || "";
+
+                infoModal.querySelector(".modal-title").textContent = title;
+                infoModal.querySelector("#infoModalBody").innerHTML = body;
+            });
+        }
+    });
+
+    let lastTriggerButton = null;
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const modal = document.getElementById("infoModal");
+
+        modal.addEventListener("show.bs.modal", function (event) {
+            lastTriggerButton = event.relatedTarget;
+        });
+
+        modal.addEventListener("hidden.bs.modal", function () {
+            if (lastTriggerButton) {
+                lastTriggerButton.focus();
+            }
+        });
+    });
+
+</script>
