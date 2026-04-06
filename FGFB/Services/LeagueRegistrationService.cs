@@ -113,15 +113,35 @@ namespace FGFB.Services
         }
         public async Task<LeagueRegistration> CreateFreeRegistrationAsync(long leagueId, string email)
         {
-            var league = await _context.Leagues.FindAsync(leagueId);
+            if (leagueId <= 0)
+                throw new ArgumentException("Invalid leagueId.", nameof(leagueId));
+
+            if (string.IsNullOrWhiteSpace(email))
+                throw new ArgumentException("Email is required.", nameof(email));
+
+            email = email.Trim();
+
+            var league = await _context.Leagues
+                .IgnoreQueryFilters()
+                .FirstOrDefaultAsync(l => l.LeagueId == leagueId);
+
             if (league == null)
                 throw new InvalidOperationException("League not found.");
+
+            if (!string.Equals(league.Status, LeagueStatus.Open, StringComparison.OrdinalIgnoreCase))
+                throw new InvalidOperationException("League is closed.");
 
             var existing = await _context.LeagueRegistrations
                 .FirstOrDefaultAsync(x => x.LeagueId == leagueId && x.Email == email);
 
             if (existing != null)
                 return existing;
+
+            var registeredCount = await _context.LeagueRegistrations
+                .CountAsync(r => r.LeagueId == leagueId);
+
+            if (registeredCount >= league.TotalRosters)
+                throw new InvalidOperationException("League is full.");
 
             var reg = new LeagueRegistration
             {
@@ -137,6 +157,8 @@ namespace FGFB.Services
 
             _context.LeagueRegistrations.Add(reg);
             await _context.SaveChangesAsync();
+
+            await SendLeagueAccessEmailAsync(email, league, 0m, 0m, 0m);
 
             return reg;
         }

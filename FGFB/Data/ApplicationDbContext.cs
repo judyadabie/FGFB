@@ -12,5 +12,13 @@ namespace FGFB.Data
 
         public DbSet<League> Leagues { get; set; }
         public DbSet<LeagueRegistration> LeagueRegistrations { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<League>()
+                .HasQueryFilter(l => l.Status == LeagueStatus.Open);
+
+            base.OnModelCreating(modelBuilder);
+        }
     }
 }

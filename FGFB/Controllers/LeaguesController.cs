@@ -1,15 +1,16 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using System.Text.Json;
-using FGFB.Data;
+﻿using FGFB.Data;
 using FGFB.Models;
 using FGFB.Services;
+using Microsoft.AspNetCore.Hosting; 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Stripe;
-using Microsoft.AspNetCore.Hosting; 
 using Stripe.Checkout;
+using Stripe.Tax;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Text.Json;
 
 namespace FGFB.Controllers
 {
@@ -125,7 +126,8 @@ namespace FGFB.Controllers
             const int currentSeason = 2026;
 
             var league = await _context.Leagues
-                .FirstOrDefaultAsync(l => l.LeagueId == id && l.SeasonYear == currentSeason);
+    .IgnoreQueryFilters()
+    .FirstOrDefaultAsync(l => l.LeagueId == registration.LeagueId);
 
             if (league == null)
                 return NotFound();
