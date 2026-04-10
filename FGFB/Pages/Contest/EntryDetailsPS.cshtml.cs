@@ -26,7 +26,7 @@ namespace FGFB.Pages.Contest
                 SqlCommand cmd = new SqlCommand("GetEntryDetailsPS", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 SqlParameter parm = new SqlParameter("@Season", SqlDbType.Int);
-                parm.Value = 2025;
+                parm.Value = 2026;
                 parm.Direction = ParameterDirection.Input;
                 cmd.Parameters.Add(parm);
                 parm = new SqlParameter("@Entryid", SqlDbType.Int);
@@ -63,7 +63,7 @@ namespace FGFB.Pages.Contest
                         cmd = new SqlCommand("GetWeeklyScoresContest", cn);
                         cmd.CommandType = CommandType.StoredProcedure;
                         parm = new SqlParameter("@Season", SqlDbType.Int);
-                        parm.Value = 2025;
+                        parm.Value = 2026;
                         parm.Direction = ParameterDirection.Input;
                         cmd.Parameters.Add(parm);
                         parm = new SqlParameter("@playerId", SqlDbType.Int);

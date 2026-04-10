@@ -1,7 +1,7 @@
 ﻿using FGFB.Data;
 using FGFB.Models;
 using FGFB.Services;
-using Microsoft.AspNetCore.Hosting; 
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
@@ -14,7 +14,6 @@ using System.Text.Json;
 
 namespace FGFB.Controllers
 {
-    
     public class LeaguesController : Controller
     {
         private readonly IWebHostEnvironment _environment;
@@ -25,12 +24,12 @@ namespace FGFB.Controllers
         private readonly LeagueRegistrationService _registrationService;
 
         public LeaguesController(
-                ApplicationDbContext context,
-                IHttpClientFactory httpClientFactory,
-                IOptions<MailchimpSettings> mailchimpOptions,
-                IOptions<StripeSettings> stripeOptions,
-                LeagueRegistrationService registrationService,
-                IWebHostEnvironment environment)
+            ApplicationDbContext context,
+            IHttpClientFactory httpClientFactory,
+            IOptions<MailchimpSettings> mailchimpOptions,
+            IOptions<StripeSettings> stripeOptions,
+            LeagueRegistrationService registrationService,
+            IWebHostEnvironment environment)
         {
             _context = context;
             _httpClientFactory = httpClientFactory;
@@ -39,6 +38,7 @@ namespace FGFB.Controllers
             _registrationService = registrationService;
             _environment = environment;
         }
+
         [HttpPost]
         [IgnoreAntiforgeryToken]
         public async Task<IActionResult> Webhook()
@@ -79,6 +79,7 @@ namespace FGFB.Controllers
                 return BadRequest($"Webhook error: {ex.Message}");
             }
         }
+
         [HttpGet]
         public async Task<IActionResult> Index(decimal? maxEntryFee, DateTime? draftDateFrom, bool bestBallOnly = false)
         {
@@ -126,8 +127,7 @@ namespace FGFB.Controllers
             const int currentSeason = 2026;
 
             var league = await _context.Leagues
-    .IgnoreQueryFilters()
-    .FirstOrDefaultAsync(l => l.LeagueId == registration.LeagueId);
+                .FirstOrDefaultAsync(l => l.LeagueId == id && l.SeasonYear == currentSeason);
 
             if (league == null)
                 return NotFound();
@@ -150,7 +150,10 @@ namespace FGFB.Controllers
             const int currentSeason = 2026;
 
             var league = await _context.Leagues
-                .FirstOrDefaultAsync(l => l.LeagueId == vm.LeagueId && l.SeasonYear == currentSeason);
+                .FirstOrDefaultAsync(l =>
+                    l.LeagueId == vm.LeagueId &&
+                    l.SeasonYear == currentSeason &&
+                    l.Status == LeagueStatus.Open);
 
             if (league == null)
                 return NotFound();
@@ -183,11 +186,29 @@ namespace FGFB.Controllers
 
             if (!league.EntryFee.HasValue || league.EntryFee.Value <= 0)
             {
-                var registration = await _registrationService.CreateFreeRegistrationAsync(vm.LeagueId, vm.Email!);
+                var result = await _registrationService.CreateFreeRegistrationAsync(vm.LeagueId, vm.Email!);
+
+                if (!result.CreatedNew)
+                {
+                    vm.ErrorMessage = @"
+<div class='join-error-inner'>
+    <div class='join-error-title'>You're already registered 🎉</div>
+    <div class='join-error-text'>
+        This email is already signed up for this league.
+    </div>
+    <a href='" + result.Registration.LeagueLink + @"'
+       target='_blank'
+       class='join-error-cta'>
+       Go to Your League →
+    </a>
+</div>";
+
+                    return View(vm);
+                }
 
                 return RedirectToAction(nameof(RegistrationSuccess), new
                 {
-                    registrationId = registration.RegistrationId
+                    registrationId = result.Registration.RegistrationId
                 });
             }
 
@@ -200,7 +221,10 @@ namespace FGFB.Controllers
             const int currentSeason = 2026;
 
             var league = await _context.Leagues
-                .FirstOrDefaultAsync(l => l.LeagueId == id && l.SeasonYear == currentSeason);
+                .FirstOrDefaultAsync(l =>
+                    l.LeagueId == id &&
+                    l.SeasonYear == currentSeason &&
+                    l.Status == LeagueStatus.Open);
 
             if (league == null)
                 return NotFound();
@@ -225,7 +249,10 @@ namespace FGFB.Controllers
             const int currentSeason = 2026;
 
             var league = await _context.Leagues
-                .FirstOrDefaultAsync(l => l.LeagueId == leagueId && l.SeasonYear == currentSeason);
+                .FirstOrDefaultAsync(l =>
+                    l.LeagueId == leagueId &&
+                    l.SeasonYear == currentSeason &&
+                    l.Status == LeagueStatus.Open);
 
             if (league == null)
                 return NotFound();
@@ -288,7 +315,8 @@ namespace FGFB.Controllers
         [HttpGet]
         public async Task<IActionResult> PaymentSuccess(string session_id)
         {
-            if (string.IsNullOrWhiteSpace(session_id)) return BadRequest();
+            if (string.IsNullOrWhiteSpace(session_id))
+                return BadRequest();
 
             var result = await _registrationService.ProcessSessionAndReturnAsync(session_id);
 
@@ -307,6 +335,7 @@ namespace FGFB.Controllers
                 registrationId = registration.RegistrationId
             });
         }
+
         [HttpGet]
         public async Task<IActionResult> RegistrationSuccess(long registrationId)
         {
@@ -317,6 +346,7 @@ namespace FGFB.Controllers
                 return NotFound();
 
             var league = await _context.Leagues
+                .IgnoreQueryFilters()
                 .FirstOrDefaultAsync(l => l.LeagueId == registration.LeagueId);
 
             if (league == null)
@@ -334,6 +364,7 @@ namespace FGFB.Controllers
 
             return View("RegistrationSuccess", vm);
         }
+
         private async Task<bool> EmailExistsInMailchimp(string email)
         {
             var client = _httpClientFactory.CreateClient();

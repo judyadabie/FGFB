@@ -29,7 +29,7 @@ namespace FGFB.Pages.Contest
                 SqlCommand cmd = new SqlCommand("GetStandingsPostSeason", cn);
                 cmd.CommandType = CommandType.StoredProcedure;
                 SqlParameter parm = new SqlParameter("@Season", SqlDbType.Int);
-                parm.Value = 2025;
+                parm.Value = 2026;
                 parm.Direction = ParameterDirection.Input;
                 cmd.Parameters.Add(parm);
                 SqlDataAdapter da = new SqlDataAdapter(cmd);

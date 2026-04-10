@@ -27,6 +27,8 @@ builder.Services.Configure<StripeSettings>(
 builder.Services.AddScoped<LeagueRegistrationService>();
 builder.Services.Configure<MailchimpTransactionalSettings>(
     builder.Configuration.GetSection("MailchimpTransactional"));
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
 
 var app = builder.Build();
 

@@ -5,7 +5,7 @@
     ViewData["Title"] = "League Payment";
 
     var entryFee = Model.EntryFee ?? 0m;
-    var processingFee = Math.Round((entryFee * 0.03m) + 0.30m, 2);
+    var processingFee = Math.Round((entryFee * 0.03m) + 0.80m, 2);
     var total = entryFee + processingFee;
 }
 

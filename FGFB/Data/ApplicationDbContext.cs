@@ -18,6 +18,9 @@ namespace FGFB.Data
             modelBuilder.Entity<League>()
                 .HasQueryFilter(l => l.Status == LeagueStatus.Open);
 
+            modelBuilder.Entity<LeagueRegistration>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
+
             base.OnModelCreating(modelBuilder);
         }
     }
