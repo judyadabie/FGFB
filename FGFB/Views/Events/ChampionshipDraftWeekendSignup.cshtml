@@ -1,0 +1,497 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Championship Draft Weekend Sign Up";
+
+    var today = DateTime.Today;
+    var eventYear = 2026;
+
+    decimal baseTicketPrice;
+    string pricingLabel;
+
+    if (today <= new DateTime(eventYear, 5, 31))
+    {
+        baseTicketPrice = 57.77m;
+        pricingLabel = "Early Bird pricing through May 31";
+    }
+    else if (today <= new DateTime(eventYear, 6, 30))
+    {
+        baseTicketPrice = 67.77m;
+        pricingLabel = "June pricing through June 30";
+    }
+    else if (today <= new DateTime(eventYear, 7, 31))
+    {
+        baseTicketPrice = 77.77m;
+        pricingLabel = "July pricing through July 31";
+    }
+    else if (today <= new DateTime(eventYear, 8, 15))
+    {
+        baseTicketPrice = 87.77m;
+        pricingLabel = "Standard pricing through Aug 15";
+    }
+    else
+    {
+        baseTicketPrice = 97.77m;
+        pricingLabel = "Final pricing through event day";
+    }
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        :root {
+            --bg: #12091f;
+            --bg2: #1b0d2b;
+            --card: rgba(255,255,255,0.06);
+            --border: rgba(255,255,255,0.12);
+            --text: #ffffff;
+            --muted: rgba(255,255,255,0.72);
+            --pink: #ec4899;
+            --pink-dark: #db2777;
+            --gold: #fbbf24;
+            --light: #ffffff;
+            --dark-text: #180d25;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: radial-gradient(circle at top left, rgba(236,72,153,0.20), transparent 28%), radial-gradient(circle at top right, rgba(168,85,247,0.16), transparent 28%), linear-gradient(180deg, #14081f 0%, #12091f 100%);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        .container {
+            width: min(1120px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .page {
+            padding: 36px 0 72px;
+        }
+
+        .topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 34px;
+        }
+
+        .eyebrow {
+            font-size: 12px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(244,114,182,0.82);
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: clamp(38px, 5vw, 62px);
+            line-height: 0.98;
+            font-weight: 900;
+            letter-spacing: -0.03em;
+        }
+
+        .subtext {
+            margin-top: 18px;
+            max-width: 760px;
+            color: var(--muted);
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 24px;
+            align-items: start;
+            margin-top: 28px;
+        }
+
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.18);
+        }
+
+        .price-callout {
+            background: linear-gradient(135deg, rgba(236,72,153,0.18), rgba(251,191,36,0.12));
+        }
+
+        .price-big {
+            font-size: 52px;
+            line-height: 1;
+            font-weight: 900;
+            margin: 10px 0 8px;
+        }
+
+        .muted {
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+            .field.full {
+                grid-column: 1 / -1;
+            }
+
+        label {
+            font-size: 14px;
+            font-weight: 700;
+            color: rgba(255,255,255,0.9);
+        }
+
+        input, select {
+            width: 100%;
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.16);
+            background: rgba(255,255,255,0.06);
+            color: white;
+            padding: 14px 16px;
+            font-size: 15px;
+        }
+
+            input::placeholder {
+                color: rgba(255,255,255,0.45);
+            }
+
+        .league-options {
+            display: grid;
+            gap: 14px;
+            margin-top: 8px;
+        }
+
+        .league-option {
+            display: block;
+            border: 1px solid rgba(255,255,255,0.14);
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 18px;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+            .league-option:hover {
+                border-color: rgba(255,255,255,0.28);
+                transform: translateY(-1px);
+            }
+
+            .league-option input {
+                display: none;
+            }
+
+            .league-option.selected {
+                border-color: rgba(236,72,153,0.8);
+                box-shadow: 0 0 0 1px rgba(236,72,153,0.45) inset;
+                background: rgba(236,72,153,0.10);
+            }
+
+        .league-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-bottom: 8px;
+        }
+
+        .league-name {
+            font-size: 18px;
+            font-weight: 800;
+        }
+
+        .league-price {
+            font-size: 22px;
+            font-weight: 900;
+            color: #fff;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.10);
+        }
+
+            .summary-row:last-of-type {
+                border-bottom: 0;
+            }
+
+        .summary-total {
+            font-size: 28px;
+            font-weight: 900;
+            margin-top: 8px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 999px;
+            padding: 14px 24px;
+            font-weight: 700;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .btn-primary {
+            background: var(--pink);
+            color: #fff;
+        }
+
+            .btn-primary:hover {
+                background: var(--pink-dark);
+            }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.05);
+            border-color: rgba(255,255,255,0.18);
+            color: #fff;
+        }
+
+        .btn-row {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 22px;
+        }
+
+        .prize-box {
+            margin-top: 18px;
+            border-radius: 20px;
+            background: rgba(251,191,36,0.08);
+            border: 1px solid rgba(251,191,36,0.18);
+            padding: 18px;
+        }
+
+            .prize-box h3 {
+                margin: 0 0 10px;
+                font-size: 18px;
+            }
+
+        .small {
+            font-size: 14px;
+            color: var(--muted);
+            line-height: 1.7;
+        }
+
+        @@media (max-width: 900px) {
+            .hero-grid, .form-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        .field.full {
+            grid-column: auto;
+        }
+
+        .topbar {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        }
+    </style>
+</head>
+<body>
+    <div class="container page">
+        <div class="topbar">
+            <a href="@Url.Action("ChampionshipDraftWeekend", "Events")" class="btn btn-outline">← Back to Event</a>
+        </div>
+
+        <div class="eyebrow">Championship Draft Weekend</div>
+        <h1>Reserve your weekend and choose your league.</h1>
+        <p class="subtext">
+            Your registration includes a base event ticket plus your selected fantasy league entry fee.
+            Choose the level that fits how you want to play.
+        </p>
+
+        <div class="hero-grid">
+            <div class="card">
+                <form method="post" action="#">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="FirstName">First Name</label>
+                            <input id="FirstName" name="FirstName" type="text" placeholder="First name" />
+                        </div>
+
+                        <div class="field">
+                            <label for="LastName">Last Name</label>
+                            <input id="LastName" name="LastName" type="text" placeholder="Last name" />
+                        </div>
+
+                        <div class="field full">
+                            <label for="Email">Email</label>
+                            <input id="Email" name="Email" type="email" placeholder="you@email.com" />
+                        </div>
+
+                        <div class="field full">
+                            <label for="LeagueLevel">Choose Your League</label>
+
+                            <div class="league-options" id="leagueOptions">
+                                <label class="league-option selected">
+                                    <input type="radio" name="LeagueFee" value="100.00" checked />
+                                    <div class="league-top">
+                                        <span class="league-name">$100 Championship League</span>
+                                        <span class="league-price">$100</span>
+                                    </div>
+                                    <div class="small">Play for the highest prize pool and a premium competition level.</div>
+                                </label>
+
+                                <label class="league-option">
+                                    <input type="radio" name="LeagueFee" value="50.00" />
+                                    <div class="league-top">
+                                        <span class="league-name">$50 League</span>
+                                        <span class="league-price">$50</span>
+                                    </div>
+                                    <div class="small">Competitive but more accessible entry point.</div>
+                                </label>
+
+                                <label class="league-option">
+                                    <input type="radio" name="LeagueFee" value="25.00" />
+                                    <div class="league-top">
+                                        <span class="league-name">$25 League</span>
+                                        <span class="league-price">$25</span>
+                                    </div>
+                                    <div class="small">A fun, affordable way to join the weekend competition.</div>
+                                </label>
+
+                                <label class="league-option">
+                                    <input type="radio" name="LeagueFee" value="0.00" />
+                                    <div class="league-top">
+                                        <span class="league-name">Free Community League</span>
+                                        <span class="league-price">Free</span>
+                                    </div>
+                                    <div class="small">Join the experience with no league entry fee.</div>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="btn-row">
+                        <button type="submit" class="btn btn-primary">Continue to Payment</button>
+                        <a href="@Url.Action("ChampionshipDraftWeekend", "Events")" class="btn btn-outline">Back to Event</a>
+                    </div>
+                </form>
+            </div>
+
+            <div>
+                <div class="card price-callout">
+                    <div class="eyebrow">Current ticket price</div>
+                    <div class="price-big" id="baseTicketDisplay">@baseTicketPrice.ToString("C")</div>
+                    <div class="muted">@pricingLabel</div>
+                </div>
+
+                <div class="card" style="margin-top: 18px;">
+                    <div class="eyebrow">Order summary</div>
+
+                    <div class="summary-row">
+                        <span>Base Weekend Ticket</span>
+                        <strong id="summaryBase">@baseTicketPrice.ToString("C")</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>League Entry Fee</span>
+                        <strong id="summaryLeague">$100.00</strong>
+                    </div>
+
+                    <div class="summary-row summary-total">
+                        <span>Total</span>
+                        <span id="summaryTotal">@((baseTicketPrice + 100m).ToString("C"))</span>
+                    </div>
+                </div>
+
+                <div class="prize-box">
+                    <h3>League Prize Structure</h3>
+                    <div class="small">
+                        <strong>1st:</strong> 60% of league prize pool<br />
+                        <strong>2nd:</strong> 30% of league prize pool<br />
+                        <strong>3rd:</strong> A free ticket to a league next season at the same level
+                    </div>
+                </div>
+
+                <div class="card" style="margin-top: 18px;">
+                    <div class="eyebrow">Ticket pricing schedule</div>
+                    <div class="small">
+                        <strong>$57.77</strong> through May 31<br />
+                        <strong>$67.77</strong> through June 30<br />
+                        <strong>$77.77</strong> through July 31<br />
+                        <strong>$87.77</strong> through August 15<br />
+                        <strong>$97.77</strong> through event day
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            const baseTicket = @baseTicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const options = document.querySelectorAll('input[name="LeagueFee"]');
+            const labels = document.querySelectorAll('.league-option');
+            const summaryLeague = document.getElementById('summaryLeague');
+            const summaryTotal = document.getElementById('summaryTotal');
+
+            function formatMoney(value) {
+                return new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD'
+                }).format(value);
+            }
+
+            function updateSelected() {
+                let leagueFee = 0;
+
+                options.forEach((option) => {
+                    if (option.checked) {
+                        leagueFee = parseFloat(option.value);
+                    }
+                });
+
+                labels.forEach((label) => {
+                    const radio = label.querySelector('input[type="radio"]');
+                    label.classList.toggle('selected', radio.checked);
+                });
+
+                summaryLeague.textContent = formatMoney(leagueFee);
+                summaryTotal.textContent = formatMoney(baseTicket + leagueFee);
+            }
+
+            options.forEach((option) => {
+                option.addEventListener('change', updateSelected);
+            });
+
+            updateSelected();
+        })();
+    </script>
+</body>
+</html>

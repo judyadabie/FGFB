@@ -1,32 +1,24 @@
 ﻿@{
+    Layout = null;
     ViewData["Title"] = "Championship Draft Weekend";
-    Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@section Styles {
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/championship-draft-weekend.css" asp-append-version="true" />
-}
+</head>
+<body>
 
 <section class="cdw-hero">
     <div class="cdw-container">
-        <div class="cdw-topbar">
-            <div class="cdw-brand">
-                <div class="cdw-brand-icon">✦</div>
-                <div>
-                    <div class="cdw-eyebrow">Fan Girl Football</div>
-                    <div class="cdw-brand-sub">Championship Draft Weekend</div>
-                </div>
-            </div>
-
-            <div class="cdw-top-actions">
-                <a href="#sponsor" class="cdw-btn cdw-btn-primary">Sponsor the Event</a>
-            </div>
-        </div>
+       
 
         <div class="cdw-hero-grid">
             <div class="cdw-hero-copy">
-                <div class="cdw-badge">Save the Date • Aug 21–22</div>
-
+               
                 <h1>
                     Where fantasy football becomes a weekend of
                     <span>connection, competition, and fun.</span>
@@ -39,6 +31,7 @@
 
                 <div class="cdw-hero-actions">
                     <a href="#weekend" class="cdw-btn cdw-btn-light">Explore the Weekend</a>
+                    <a asp-controller="Events" asp-action="ChampionshipDraftWeekendSignup" class="cdw-btn cdw-btn-primary">Sign Up Now</a>
                     <a href="#sponsor" class="cdw-btn cdw-btn-outline">Become a Sponsor</a>
                 </div>
 
@@ -48,31 +41,28 @@
                         <div class="cdw-stat-value">Aug 21–22</div>
                     </div>
                     <div class="cdw-stat-card">
-                        <div class="cdw-stat-label">Community</div>
-                        <div class="cdw-stat-value">1,500+ Women</div>
+                        <div class="cdw-stat-label">Network</div>
+                            <div class="cdw-stat-value">Stylish, social, welcoming, and built for connection.</div>
                     </div>
                     <div class="cdw-stat-card">
-                        <div class="cdw-stat-label">Focus</div>
-                        <div class="cdw-stat-value">Networking</div>
+                            <div class="cdw-stat-label">Live Draft</div>
+                            <div class="cdw-stat-value">A high-energy fantasy football draft built around community</div>
                     </div>
                 </div>
             </div>
 
-            <div class="cdw-hero-visual">
-                <div class="cdw-hero-image-card">
-                    <img src="~/images/championship-draft-weekend-promo.jpg" alt="Championship Draft Weekend promo" />
-                    <div class="cdw-hero-overlay-card cdw-hero-overlay-top">
-                        <div class="cdw-overlay-label">Friday</div>
-                        <div class="cdw-overlay-title">Network & Meet</div>
-                        <p>Stylish, social, welcoming, and built for connection.</p>
-                    </div>
-                    <div class="cdw-hero-overlay-card cdw-hero-overlay-bottom">
-                        <div class="cdw-overlay-label gold">Saturday</div>
-                        <div class="cdw-overlay-title">Live Draft Experience</div>
-                        <p>A high-energy fantasy football draft built around community and competition.</p>
+                <div class="cdw-hero-visual">
+                    <div class="cdw-hero-image-card">
+                        <div class="cdw-hero-video">
+                            <video autoplay muted loop playsinline poster="@Url.Content("~/img/events/championship-draft-weekend-promo.png")">
+                                <source src="@Url.Content("~/img/events/draft-weekend.mp4")" type="video/mp4">
+                            </video>
+                        </div>
+
+
+                      
                     </div>
                 </div>
-            </div>
         </div>
     </div>
 </section>
@@ -141,12 +131,15 @@
 
             <div class="cdw-audience-images">
                 <div class="cdw-image-stack cdw-image-stack-one">
-                    <img src="~/images/women-drafting.jpg" alt="Women drafting fantasy football teams" />
+                        <img src="~/img/events/championship-draft-weekend-promo.png" alt="Women drafting fantasy football teams" />
                 </div>
                 <div class="cdw-image-stack cdw-image-stack-two">
-                    <img src="~/images/women-watching-football.jpg" alt="Women watching football together" />
+                    <img src="~/img/events/handcircle.png" alt="Women watching football together" />
                 </div>
             </div>
+                <div class="cdw-hero-actions">
+                    <a href="#sponsor" class="cdw-btn cdw-btn-primary">Sign Up Now</a>
+                </div>
         </div>
     </div>
 </section>
@@ -159,64 +152,75 @@
                 <h2>Partnership opportunities designed for visibility, alignment, and engagement.</h2>
             </div>
 
-            <a href="mailto:youremail@domain.com?subject=Championship%20Draft%20Weekend%20Sponsorship" class="cdw-btn cdw-btn-primary">
+            <a href="mailto:judy@fangirlfootball.com" class="cdw-btn cdw-btn-primary">
                 Request Sponsorship Details
             </a>
         </div>
 
         <div class="cdw-package-grid">
             <div class="cdw-package-card">
-                <div class="cdw-package-name">Premier Partner</div>
+                <div class="cdw-package-name">MVP Sponsor (Title Sponsor)</div>
                 <div class="cdw-package-price">$5,000</div>
                 <p>
                     Own the weekend with top-tier branding, pre-event promotion, and premium visibility
                     throughout the experience.
                 </p>
                 <ul>
-                    <li>Presenting partner recognition</li>
-                    <li>Featured social + email promotion</li>
-                    <li>Premium onsite branding</li>
+                        <li>Title Sponsor recognition</li>
+                        <li>Logo on all event marketing materials</li>
+                        <li>Premium logo placement</li>
+                        <li>Social media promotion (pre + post event)</li>
+                        <li>Recognition during event opening and closing</li>
+                        <li>Logo on event signage</li>
+                        <li>Swag bag inclusio</li>
+                        <li>Opportunity to provide promotional materials</li>
                 </ul>
             </div>
 
             <div class="cdw-package-card">
-                <div class="cdw-package-name">Experience Partner</div>
-                <div class="cdw-package-price">$2,500–$3,500</div>
+                <div class="cdw-package-name">League Title Sponsor</div>
+                <div class="cdw-package-price">$3000</div>
                 <p>
-                    Sponsor a signature moment like the Friday networking event, champagne experience,
-                    or live draft environment.
+                        Sponsor a flagship Fan Girl Football league and connect directly with players all season long.  You pick either a Championship League or a Free Community League.
                 </p>
                 <ul>
-                    <li>Moment-based branding</li>
-                    <li>Event integration</li>
-                    <li>Audience-facing visibility</li>
+                    <li>You pick either a Championship League or a Free Community League.</li>
+                    <li>Logo on all event marketing materials</li>
+                    <li>Social media promotion (pre + post event)</li>
+                    <li>Recognition during event</li>
+                    <li>Swag bag inclusion</li>
+                    <li>Opportunity to provide promotional materials</li>
                 </ul>
             </div>
 
             <div class="cdw-package-card">
-                <div class="cdw-package-name">Supporting Partner</div>
-                <div class="cdw-package-price">$1,000–$1,500</div>
+                <div class="cdw-package-name">Redzone Sponsor</div>
+                <div class="cdw-package-price">$1,500</div>
                 <p>
                     Be part of the overall event experience with strong visibility and meaningful audience alignment.
                 </p>
                 <ul>
-                    <li>Logo presence</li>
-                    <li>Social mentions</li>
-                    <li>Onsite exposure</li>
+                    <li>Logo on all event marketing materials</li>
+                    <li>Social media promotion (pre + post event)</li>
+                    <li>Recognition during event</li>
+                    <li>Swag bag inclusion</li>
+                    <li>Logo on event signage</li>
                 </ul>
             </div>
 
             <div class="cdw-package-card">
-                <div class="cdw-package-name">In-Kind Partner</div>
-                <div class="cdw-package-price">Product / Swag</div>
+                    <div class="cdw-package-name">Game Day Sponsor</div>
+                <div class="cdw-package-price">Prize / Swag</div>
                 <p>
                     Put your brand directly in attendees’ hands through giveaways, curated swag,
                     or product integration.
                 </p>
                 <ul>
                     <li>Swag bag inclusion</li>
+                    <li>Social media shoutout</li>
                     <li>Product spotlight</li>
                     <li>Community exposure</li>
+                    <li>Logo on sponsor page/event materials</li>
                 </ul>
             </div>
         </div>
@@ -266,7 +270,7 @@
                     <li>Community exposure before, during, and after the event</li>
                 </ul>
 
-                <a href="mailto:youremail@domain.com?subject=Championship%20Draft%20Weekend%20Sponsorship" class="cdw-btn cdw-btn-light">
+                <a href="mailto:judy@fangirlfootball.com" class="cdw-btn cdw-btn-light">
                     Become a Sponsor
                 </a>
             </div>
@@ -289,3 +293,5 @@
         </div>
     </div>
 </section>
+</body>
+</html>
