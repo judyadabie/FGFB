@@ -391,16 +391,6 @@ input {
     margin-top: 18px;
 }
 
-@media (max-width: 900px) {
-    .hero-grid,
-    .form-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .field.full {
-        grid-column: auto;
-    }
-}
 .terms-inline {
     margin-top: 24px;
     display: flex;
@@ -480,39 +470,7 @@ input {
     line-height: 1.75;
     padding-right: 8px;
 }
-@media (max-width: 900px) {
-    .hero-grid {
-        display: flex;
-        flex-direction: column;
-    }
 
-    /* 1. Price FIRST */
-    .price-callout {
-        order: 1;
-    }
-
-    /* 2. Form (name/email + league) */
-    .hero-grid > div:first-child {
-        order: 2;
-    }
-
-    /* 3. Order Summary AFTER league selection */
-    .hero-grid > div:nth-child(2) .card:nth-child(2) {
-        order: 3;
-    }
-
-    /* 4. Prize box LAST */
-    .hero-grid > div:nth-child(2) .prize-box {
-        order: 4;
-    }
-
-    /* Stack right column contents cleanly */
-    .hero-grid > div:nth-child(2) {
-        display: flex;
-        flex-direction: column;
-        gap: 18px;
-    }
-}
 .terms-modal-close {
     position: absolute;
     top: 14px;
@@ -526,4 +484,31 @@ input {
     font-size: 24px;
     line-height: 1;
     cursor: pointer;
+}
+
+@media (max-width: 900px) {
+    .hero-grid {
+        display: flex;
+        flex-direction: column;
+    }
+
+        /* Price FIRST */
+        .hero-grid > div:nth-child(2) .price-callout {
+            order: 1;
+        }
+
+        /* Signup SECOND */
+        .hero-grid > div:first-child {
+            order: 2;
+        }
+
+        /* Summary THIRD */
+        .hero-grid > div:nth-child(2) .card.mt-18 {
+            order: 3;
+        }
+
+        /* Prize LAST */
+        .hero-grid > div:nth-child(2) .prize-box {
+            order: 4;
+        }
 }
