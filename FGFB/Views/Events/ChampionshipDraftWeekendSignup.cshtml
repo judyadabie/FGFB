@@ -1,326 +1,15 @@
-﻿@{
+﻿@model FGFB.Models.ChampionshipDraftWeekendSignupViewModel
+@{
     Layout = null;
     ViewData["Title"] = "Championship Draft Weekend Sign Up";
-
-    var today = DateTime.Today;
-    var eventYear = 2026;
-
-    decimal baseTicketPrice;
-    string pricingLabel;
-
-    if (today <= new DateTime(eventYear, 5, 31))
-    {
-        baseTicketPrice = 57.77m;
-        pricingLabel = "Early Bird pricing through May 31";
-    }
-    else if (today <= new DateTime(eventYear, 6, 30))
-    {
-        baseTicketPrice = 67.77m;
-        pricingLabel = "June pricing through June 30";
-    }
-    else if (today <= new DateTime(eventYear, 7, 31))
-    {
-        baseTicketPrice = 77.77m;
-        pricingLabel = "July pricing through July 31";
-    }
-    else if (today <= new DateTime(eventYear, 8, 15))
-    {
-        baseTicketPrice = 87.77m;
-        pricingLabel = "Standard pricing through Aug 15";
-    }
-    else
-    {
-        baseTicketPrice = 97.77m;
-        pricingLabel = "Final pricing through event day";
-    }
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"]</title>
-    <style>
-        :root {
-            --bg: #12091f;
-            --bg2: #1b0d2b;
-            --card: rgba(255,255,255,0.06);
-            --border: rgba(255,255,255,0.12);
-            --text: #ffffff;
-            --muted: rgba(255,255,255,0.72);
-            --pink: #ec4899;
-            --pink-dark: #db2777;
-            --gold: #fbbf24;
-            --light: #ffffff;
-            --dark-text: #180d25;
-        }
-
-        * {
-            box-sizing: border-box;
-        }
-
-        body {
-            margin: 0;
-            font-family: Arial, Helvetica, sans-serif;
-            background: radial-gradient(circle at top left, rgba(236,72,153,0.20), transparent 28%), radial-gradient(circle at top right, rgba(168,85,247,0.16), transparent 28%), linear-gradient(180deg, #14081f 0%, #12091f 100%);
-            color: var(--text);
-        }
-
-        a {
-            text-decoration: none;
-        }
-
-        .container {
-            width: min(1120px, calc(100% - 32px));
-            margin: 0 auto;
-        }
-
-        .page {
-            padding: 36px 0 72px;
-        }
-
-        .topbar {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 16px;
-            margin-bottom: 34px;
-        }
-
-        .eyebrow {
-            font-size: 12px;
-            letter-spacing: 0.28em;
-            text-transform: uppercase;
-            color: rgba(244,114,182,0.82);
-            font-weight: 700;
-            margin-bottom: 10px;
-        }
-
-        h1 {
-            margin: 0;
-            font-size: clamp(38px, 5vw, 62px);
-            line-height: 0.98;
-            font-weight: 900;
-            letter-spacing: -0.03em;
-        }
-
-        .subtext {
-            margin-top: 18px;
-            max-width: 760px;
-            color: var(--muted);
-            font-size: 18px;
-            line-height: 1.8;
-        }
-
-        .hero-grid {
-            display: grid;
-            grid-template-columns: 1.1fr 0.9fr;
-            gap: 24px;
-            align-items: start;
-            margin-top: 28px;
-        }
-
-        .card {
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 28px;
-            padding: 28px;
-            box-shadow: 0 18px 40px rgba(0,0,0,0.18);
-        }
-
-        .price-callout {
-            background: linear-gradient(135deg, rgba(236,72,153,0.18), rgba(251,191,36,0.12));
-        }
-
-        .price-big {
-            font-size: 52px;
-            line-height: 1;
-            font-weight: 900;
-            margin: 10px 0 8px;
-        }
-
-        .muted {
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 18px;
-        }
-
-        .field {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 18px;
-        }
-
-            .field.full {
-                grid-column: 1 / -1;
-            }
-
-        label {
-            font-size: 14px;
-            font-weight: 700;
-            color: rgba(255,255,255,0.9);
-        }
-
-        input, select {
-            width: 100%;
-            border-radius: 16px;
-            border: 1px solid rgba(255,255,255,0.16);
-            background: rgba(255,255,255,0.06);
-            color: white;
-            padding: 14px 16px;
-            font-size: 15px;
-        }
-
-            input::placeholder {
-                color: rgba(255,255,255,0.45);
-            }
-
-        .league-options {
-            display: grid;
-            gap: 14px;
-            margin-top: 8px;
-        }
-
-        .league-option {
-            display: block;
-            border: 1px solid rgba(255,255,255,0.14);
-            background: rgba(255,255,255,0.05);
-            border-radius: 20px;
-            padding: 18px;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
-
-            .league-option:hover {
-                border-color: rgba(255,255,255,0.28);
-                transform: translateY(-1px);
-            }
-
-            .league-option input {
-                display: none;
-            }
-
-            .league-option.selected {
-                border-color: rgba(236,72,153,0.8);
-                box-shadow: 0 0 0 1px rgba(236,72,153,0.45) inset;
-                background: rgba(236,72,153,0.10);
-            }
-
-        .league-top {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 16px;
-            margin-bottom: 8px;
-        }
-
-        .league-name {
-            font-size: 18px;
-            font-weight: 800;
-        }
-
-        .league-price {
-            font-size: 22px;
-            font-weight: 900;
-            color: #fff;
-        }
-
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            gap: 16px;
-            padding: 12px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.10);
-        }
-
-            .summary-row:last-of-type {
-                border-bottom: 0;
-            }
-
-        .summary-total {
-            font-size: 28px;
-            font-weight: 900;
-            margin-top: 8px;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 999px;
-            padding: 14px 24px;
-            font-weight: 700;
-            border: 1px solid transparent;
-            cursor: pointer;
-            transition: 0.2s ease;
-        }
-
-        .btn-primary {
-            background: var(--pink);
-            color: #fff;
-        }
-
-            .btn-primary:hover {
-                background: var(--pink-dark);
-            }
-
-        .btn-outline {
-            background: rgba(255,255,255,0.05);
-            border-color: rgba(255,255,255,0.18);
-            color: #fff;
-        }
-
-        .btn-row {
-            display: flex;
-            gap: 12px;
-            flex-wrap: wrap;
-            margin-top: 22px;
-        }
-
-        .prize-box {
-            margin-top: 18px;
-            border-radius: 20px;
-            background: rgba(251,191,36,0.08);
-            border: 1px solid rgba(251,191,36,0.18);
-            padding: 18px;
-        }
-
-            .prize-box h3 {
-                margin: 0 0 10px;
-                font-size: 18px;
-            }
-
-        .small {
-            font-size: 14px;
-            color: var(--muted);
-            line-height: 1.7;
-        }
-
-        @@media (max-width: 900px) {
-            .hero-grid, .form-grid
-
-        {
-            grid-template-columns: 1fr;
-        }
-
-        .field.full {
-            grid-column: auto;
-        }
-
-        .topbar {
-            flex-direction: column;
-            align-items: flex-start;
-        }
-
-        }
-    </style>
+    <link rel="stylesheet" href="~/css/championship-draft-weekend-signup.css" asp-append-version="true" />
 </head>
 <body>
     <div class="container page">
@@ -328,75 +17,136 @@
             <a href="@Url.Action("ChampionshipDraftWeekend", "Events")" class="btn btn-outline">← Back to Event</a>
         </div>
 
+        <div class="member-required-banner">
+            <div class="member-required-title">Fan Girl Football membership is required</div>
+            <div class="member-required-text">
+                Membership is free and the email you use here must match your Fan Girl Football membership email.
+            </div>
+            <a class="member-signup-link" href="https://fan-girl-football.mn.co/sign_up" target="_blank">
+                Sign up for free membership here →
+            </a>
+        </div>
+
         <div class="eyebrow">Championship Draft Weekend</div>
         <h1>Reserve your weekend and choose your league.</h1>
         <p class="subtext">
-            Your registration includes a base event ticket plus your selected fantasy league entry fee.
-            Choose the level that fits how you want to play.
+            Your registration includes a base event ticket, your league entry fee, and processing.
         </p>
+
+        @if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
+        {
+            <div class="membership-error-box">
+                @Model.ErrorMessage
+            </div>
+        }
 
         <div class="hero-grid">
             <div class="card">
-                <form method="post" action="#">
+                <form asp-controller="Events" asp-action="CreateEventStripeCheckout" method="post" id="signupForm">
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="validation-summary"></div>
+
                     <div class="form-grid">
                         <div class="field">
-                            <label for="FirstName">First Name</label>
-                            <input id="FirstName" name="FirstName" type="text" placeholder="First name" />
+                            <label asp-for="FirstName"></label>
+                            <input asp-for="FirstName" />
+                            <span asp-validation-for="FirstName" class="field-validation"></span>
                         </div>
 
                         <div class="field">
-                            <label for="LastName">Last Name</label>
-                            <input id="LastName" name="LastName" type="text" placeholder="Last name" />
+                            <label asp-for="LastName"></label>
+                            <input asp-for="LastName" />
+                            <span asp-validation-for="LastName" class="field-validation"></span>
                         </div>
 
                         <div class="field full">
-                            <label for="Email">Email</label>
-                            <input id="Email" name="Email" type="email" placeholder="you@email.com" />
+                            <label asp-for="Email"></label>
+                            <input asp-for="Email" id="emailField" />
+                            <span asp-validation-for="Email" class="field-validation"></span>
+                            <div id="membershipValidationMessage" class="membership-validation-message"></div>
                         </div>
 
                         <div class="field full">
-                            <label for="LeagueLevel">Choose Your League</label>
+                            <label asp-for="LeagueLevel">Choose Your League</label>
 
-                            <div class="league-options" id="leagueOptions">
-                                <label class="league-option selected">
-                                    <input type="radio" name="LeagueFee" value="100.00" checked />
+                            <div class="league-options">
+                                <label class="league-option @(Model.LeagueLevel == "100" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="100" />
                                     <div class="league-top">
                                         <span class="league-name">$100 Championship League</span>
                                         <span class="league-price">$100</span>
                                     </div>
-                                    <div class="small">Play for the highest prize pool and a premium competition level.</div>
+                                    <div class="small">Highest prize pool and premium competition level.</div>
                                 </label>
 
-                                <label class="league-option">
-                                    <input type="radio" name="LeagueFee" value="50.00" />
+                                <label class="league-option @(Model.LeagueLevel == "50" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="50" />
                                     <div class="league-top">
                                         <span class="league-name">$50 League</span>
                                         <span class="league-price">$50</span>
                                     </div>
-                                    <div class="small">Competitive but more accessible entry point.</div>
+                                    <div class="small">Competitive and more accessible.</div>
                                 </label>
 
-                                <label class="league-option">
-                                    <input type="radio" name="LeagueFee" value="25.00" />
+                                <label class="league-option @(Model.LeagueLevel == "25" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="25" />
                                     <div class="league-top">
                                         <span class="league-name">$25 League</span>
                                         <span class="league-price">$25</span>
                                     </div>
-                                    <div class="small">A fun, affordable way to join the weekend competition.</div>
+                                    <div class="small">Affordable and fun.</div>
                                 </label>
 
-                                <label class="league-option">
-                                    <input type="radio" name="LeagueFee" value="0.00" />
+                                <label class="league-option @(Model.LeagueLevel == "0" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="0" />
                                     <div class="league-top">
                                         <span class="league-name">Free Community League</span>
                                         <span class="league-price">Free</span>
                                     </div>
-                                    <div class="small">Join the experience with no league entry fee.</div>
+                                    <div class="small">Join the weekend with no league entry fee.</div>
                                 </label>
                             </div>
                         </div>
                     </div>
 
+                    <div class="terms-inline">
+                        <input asp-for="AgreeToTerms" type="checkbox" id="agreeToTerms" />
+                        <label for="agreeToTerms">
+                            I agree to the
+                            <a href="#" id="openTermsModal" class="terms-link">Terms and Conditions</a>.
+                        </label>
+                    </div>
+                    <span asp-validation-for="AgreeToTerms" class="field-validation"></span>
+
+                    <div id="termsModal" class="terms-modal" aria-hidden="true">
+                        <div class="terms-modal-backdrop" id="closeTermsModalBg"></div>
+                        <div class="terms-modal-dialog" role="dialog" aria-modal="true" aria-labelledby="termsModalTitle">
+                            <button type="button" class="terms-modal-close" id="closeTermsModalBtn" aria-label="Close">×</button>
+
+                            <h3 id="termsModalTitle">Terms and Conditions</h3>
+
+                            <div class="terms-modal-content">
+                                <p>
+                                    By registering for Championship Draft Weekend, you acknowledge that this event includes live participation,
+                                    networking, fantasy football contests, and event photography and video.
+                                </p>
+                                <p>
+                                    All registrations are final unless otherwise stated by Fan Girl Football. League prizes are based on the
+                                    selected entry level and will be awarded according to the posted prize structure.
+                                </p>
+                                <p>
+                                    By attending, you grant Fan Girl Football permission to use photos and video taken during the event for
+                                    marketing, promotional, editorial, website, social media, and future event materials without additional
+                                    compensation.
+                                </p>
+                                <p>
+                                    Fan Girl Football reserves the right to make event updates as needed, including scheduling, format,
+                                    and league administration decisions.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
                     <div class="btn-row">
                         <button type="submit" class="btn btn-primary">Continue to Payment</button>
                         <a href="@Url.Action("ChampionshipDraftWeekend", "Events")" class="btn btn-outline">Back to Event</a>
@@ -407,59 +157,88 @@
             <div>
                 <div class="card price-callout">
                     <div class="eyebrow">Current ticket price</div>
-                    <div class="price-big" id="baseTicketDisplay">@baseTicketPrice.ToString("C")</div>
-                    <div class="muted">@pricingLabel</div>
+                    <div class="price-big">@Model.BaseTicketPrice.ToString("C")</div>
+                    <div class="muted">@Model.PricingLabel</div>
                 </div>
 
-                <div class="card" style="margin-top: 18px;">
+                <div class="card mt-18">
                     <div class="eyebrow">Order summary</div>
 
                     <div class="summary-row">
                         <span>Base Weekend Ticket</span>
-                        <strong id="summaryBase">@baseTicketPrice.ToString("C")</strong>
+                        <strong id="summaryBase">@Model.BaseTicketPrice.ToString("C")</strong>
                     </div>
 
                     <div class="summary-row">
                         <span>League Entry Fee</span>
-                        <strong id="summaryLeague">$100.00</strong>
+                        <strong id="summaryLeague">@Model.LeagueFee.ToString("C")</strong>
+                    </div>
+
+                    <div class="summary-row">
+                        <span>Processing Fee</span>
+                        <strong id="summaryFee">@Model.ProcessingFee.ToString("C")</strong>
                     </div>
 
                     <div class="summary-row summary-total">
                         <span>Total</span>
-                        <span id="summaryTotal">@((baseTicketPrice + 100m).ToString("C"))</span>
+                        <span id="summaryTotal">@Model.Total.ToString("C")</span>
                     </div>
                 </div>
 
                 <div class="prize-box">
                     <h3>League Prize Structure</h3>
-                    <div class="small">
-                        <strong>1st:</strong> 60% of league prize pool<br />
-                        <strong>2nd:</strong> 30% of league prize pool<br />
-                        <strong>3rd:</strong> A free ticket to a league next season at the same level
-                    </div>
-                </div>
 
-                <div class="card" style="margin-top: 18px;">
-                    <div class="eyebrow">Ticket pricing schedule</div>
-                    <div class="small">
-                        <strong>$57.77</strong> through May 31<br />
-                        <strong>$67.77</strong> through June 30<br />
-                        <strong>$77.77</strong> through July 31<br />
-                        <strong>$87.77</strong> through August 15<br />
-                        <strong>$97.77</strong> through event day
+                    <div class="prize-tier">
+                        <strong>$100 Championship League</strong>
+                        <div>1st: $720 | 2nd: $360 | 3rd: $120</div>
+                    </div>
+
+                    <div class="prize-tier">
+                        <strong>$50 League</strong>
+                        <div>1st: $360 | 2nd: $180 | 3rd: $60</div>
+                    </div>
+
+                    <div class="prize-tier">
+                        <strong>$25 League</strong>
+                        <div>1st: $180 | 2nd: $90 | 3rd: $30</div>
+                    </div>
+
+                    <div class="prize-tier">
+                        <strong>Free Community League</strong>
+                        <div>Community bragging rights and a fun weekend competition</div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
+    <partial name="_ValidationScriptsPartial" />
+
     <script>
         (function () {
-            const baseTicket = @baseTicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture);
-            const options = document.querySelectorAll('input[name="LeagueFee"]');
+            const baseTicket = @Model.BaseTicketPrice.ToString(System.Globalization.CultureInfo.InvariantCulture);
+            const options = document.querySelectorAll('input[name="LeagueLevel"]');
             const labels = document.querySelectorAll('.league-option');
             const summaryLeague = document.getElementById('summaryLeague');
+            const summaryFee = document.getElementById('summaryFee');
             const summaryTotal = document.getElementById('summaryTotal');
+            const emailField = document.getElementById('emailField');
+            const validationMessage = document.getElementById('membershipValidationMessage');
+            const form = document.getElementById('signupForm');
+
+            function leagueFeeFromValue(value) {
+                switch (value) {
+                    case "100": return 100;
+                    case "50": return 50;
+                    case "25": return 25;
+                    case "0": return 0;
+                    default: return 100;
+                }
+            }
+
+            function calcFee(amount) {
+                return Math.round(((amount * 0.03) + 0.80) * 100) / 100;
+            }
 
             function formatMoney(value) {
                 return new Intl.NumberFormat('en-US', {
@@ -469,11 +248,11 @@
             }
 
             function updateSelected() {
-                let leagueFee = 0;
+                let leagueFee = 100;
 
                 options.forEach((option) => {
                     if (option.checked) {
-                        leagueFee = parseFloat(option.value);
+                        leagueFee = leagueFeeFromValue(option.value);
                     }
                 });
 
@@ -482,16 +261,87 @@
                     label.classList.toggle('selected', radio.checked);
                 });
 
+                const processingFee = calcFee(baseTicket + leagueFee);
+                const total = baseTicket + leagueFee + processingFee;
+
                 summaryLeague.textContent = formatMoney(leagueFee);
-                summaryTotal.textContent = formatMoney(baseTicket + leagueFee);
+                summaryFee.textContent = formatMoney(processingFee);
+                summaryTotal.textContent = formatMoney(total);
+            }
+
+            async function validateMembershipEmail() {
+                const email = emailField.value.trim();
+
+                if (!email) {
+                    validationMessage.className = 'membership-validation-message error';
+                    validationMessage.textContent = 'Please enter your membership email.';
+                    return false;
+                }
+
+                try {
+                    const response = await fetch(`/Events/ValidateMembershipEmail?email=${encodeURIComponent(email)}`);
+                    const result = await response.json();
+
+                    if (result.valid) {
+                        validationMessage.className = 'membership-validation-message success';
+                        validationMessage.textContent = result.message;
+                        return true;
+                    } else {
+                        validationMessage.className = 'membership-validation-message error';
+                        validationMessage.textContent = result.message;
+                        return false;
+                    }
+                } catch {
+                    validationMessage.className = 'membership-validation-message error';
+                    validationMessage.textContent = 'Unable to validate membership email right now. Please try again.';
+                    return false;
+                }
             }
 
             options.forEach((option) => {
                 option.addEventListener('change', updateSelected);
             });
 
+            emailField.addEventListener('blur', async function () {
+                await validateMembershipEmail();
+            });
+
+            form.addEventListener('submit', async function (e) {
+                const ok = await validateMembershipEmail();
+                if (!ok) {
+                    e.preventDefault();
+                    emailField.focus();
+                }
+            });
+
             updateSelected();
         })();
+                const openTermsModal = document.getElementById('openTermsModal');
+        const termsModal = document.getElementById('termsModal');
+        const closeTermsModalBtn = document.getElementById('closeTermsModalBtn');
+        const closeTermsModalBg = document.getElementById('closeTermsModalBg');
+
+        function openTerms() {
+            termsModal.classList.add('open');
+        }
+
+        function closeTerms() {
+            termsModal.classList.remove('open');
+        }
+
+        openTermsModal.addEventListener('click', function (e) {
+            e.preventDefault();
+            openTerms();
+        });
+
+        closeTermsModalBtn.addEventListener('click', closeTerms);
+        closeTermsModalBg.addEventListener('click', closeTerms);
+
+        document.addEventListener('keydown', function (e) {
+            if (e.key === 'Escape') {
+                closeTerms();
+            }
+        });
     </script>
 </body>
 </html>

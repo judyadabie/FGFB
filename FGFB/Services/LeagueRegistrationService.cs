@@ -38,7 +38,7 @@ namespace FGFB.Services
 
         public decimal CalculateFee(decimal amount)
         {
-            return Math.Round((amount * 0.03m) + 0.30m, 2);
+            return Math.Round((amount * 0.03m) + 0.80m, 2);
         }
         public async Task ProcessCompletedCheckoutSessionAsync(Session session)
         {

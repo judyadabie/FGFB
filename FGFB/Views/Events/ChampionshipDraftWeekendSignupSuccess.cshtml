@@ -1,0 +1,62 @@
+﻿@model FGFB.Models.EventRegistration
+@{
+    Layout = null;
+    ViewData["Title"] = "Registration Complete";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: #12091f;
+            color: #fff;
+        }
+
+        .wrap {
+            width: min(760px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 90px 0;
+        }
+
+        .card {
+            border: 1px solid rgba(255,255,255,.12);
+            background: rgba(255,255,255,.06);
+            border-radius: 28px;
+            padding: 36px;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-flex;
+            margin-top: 24px;
+            padding: 14px 24px;
+            border-radius: 999px;
+            background: #ec4899;
+            color: #fff;
+            text-decoration: none;
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="card">
+            <h1>You’re in!</h1>
+            <p>Your Championship Draft Weekend registration has been completed successfully.</p>
+
+            @if (Model != null)
+            {
+                <p><strong>League:</strong> @Model.LeagueDisplayName</p>
+                <p><strong>Total Paid:</strong> @Model.TotalPaid.ToString("C")</p>
+            }
+
+            <a href="@Url.Action("ChampionshipDraftWeekend", "Events")" class="btn">Back to Event Page</a>
+        </div>
+    </div>
+</body>
+</html>

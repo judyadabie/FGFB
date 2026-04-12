@@ -29,6 +29,7 @@ builder.Services.Configure<MailchimpTransactionalSettings>(
     builder.Configuration.GetSection("MailchimpTransactional"));
 builder.Services.Configure<EmailSettings>(
     builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddScoped<EventRegistrationService>();
 
 var app = builder.Build();
 
