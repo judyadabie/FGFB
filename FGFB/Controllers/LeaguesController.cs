@@ -86,7 +86,7 @@ namespace FGFB.Controllers
             const int currentSeason = 2026;
 
             var query = _context.Leagues
-                .Where(l => l.SeasonYear == currentSeason);
+                .Where(l => l.SeasonYear == currentSeason && l.Status == LeagueStatus.Open);
 
             if (maxEntryFee.HasValue)
             {

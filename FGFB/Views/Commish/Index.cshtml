@@ -1,0 +1,455 @@
+﻿@model FGFB.Models.CommishDashboardViewModel
+
+@{
+    ViewData["Title"] = "Commish Dashboard";
+}
+ <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+<style>
+    .commish-dashboard {
+        background: #f7f4fb;
+        min-height: 100vh;
+        padding: 32px 16px 56px;
+    }
+
+    .commish-shell {
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+
+    .commish-hero {
+        max-width: 1100px;
+        margin: 0 auto 24px auto;
+        background: linear-gradient(135deg, #2b1247 0%, #5b2a86 55%, #8b5cf6 100%);
+        border-radius: 24px;
+        padding: 30px 32px;
+        color: #fff;
+        box-shadow: 0 18px 40px rgba(43, 18, 71, 0.22);
+    }
+
+    .commish-hero-inner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+        flex-wrap: wrap;
+    }
+
+    .commish-hero-copy {
+        text-align: left;
+    }
+
+        .commish-hero-copy h1 {
+            margin: 0 0 6px;
+            font-size: 2rem;
+            font-weight: 800;
+        }
+
+        .commish-hero-copy p {
+            margin: 0;
+            opacity: 0.94;
+            font-size: 1rem;
+        }
+
+    .commish-logout-btn {
+        border-radius: 999px;
+        padding: 10px 18px;
+        font-weight: 700;
+        color: #fff;
+        border: 1px solid rgba(255,255,255,0.35);
+        background: rgba(255,255,255,0.10);
+    }
+
+        .commish-logout-btn:hover {
+            color: #fff;
+            background: rgba(255,255,255,0.18);
+        }
+
+    .commish-stats {
+        max-width: 1100px;
+        margin: 0 auto 24px auto;
+    }
+
+    .commish-stat-card,
+    .commish-section-card {
+        border: 0;
+        border-radius: 22px;
+        box-shadow: 0 10px 28px rgba(36, 18, 66, 0.08);
+        background: #fff;
+    }
+
+        .commish-stat-card .card-body {
+            padding: 24px;
+            text-align: center;
+        }
+
+    .commish-stat-label {
+        color: #6b7280;
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 10px;
+    }
+
+    .commish-stat-number {
+        font-size: 2.25rem;
+        line-height: 1;
+        font-weight: 800;
+        color: #2b1247;
+    }
+
+    .commish-sections {
+        max-width: 1100px;
+        margin: 0 auto;
+    }
+
+    .commish-section-card {
+        margin-bottom: 24px;
+    }
+
+        .commish-section-card .card-body {
+            padding: 26px;
+        }
+
+    .commish-section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 18px;
+    }
+
+    .commish-section-title {
+        margin: 0;
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: #2b1247;
+    }
+
+    .commish-count-badge {
+        background: #efe7ff;
+        color: #6f42c1;
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 700;
+        font-size: 0.9rem;
+    }
+
+    .commish-table-wrap {
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        border-radius: 16px;
+    }
+
+    .commish-table {
+        margin-bottom: 0;
+        min-width: 900px;
+    }
+
+        .commish-table thead th {
+            background: #f3ecff;
+            color: #4b5563;
+            border-bottom: 0;
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            padding: 14px 12px;
+            white-space: nowrap;
+        }
+
+        .commish-table tbody td {
+            padding: 14px 12px;
+            vertical-align: middle;
+            border-color: #eee7f8;
+            white-space: nowrap;
+        }
+
+        .commish-table tbody tr:hover {
+            background: #fcfaff;
+        }
+
+    .commish-name {
+        font-weight: 700;
+        color: #2b1247;
+    }
+
+    .commish-subtext {
+        color: #6b7280;
+        font-size: 0.88rem;
+    }
+
+    .commish-status {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 6px 12px;
+        border-radius: 999px;
+        font-size: 0.82rem;
+        font-weight: 700;
+        background: #ede9fe;
+        color: #6d28d9;
+    }
+
+        .commish-status.paid {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .commish-status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .commish-status.failed,
+        .commish-status.cancelled {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+    .commish-link {
+        color: #6f42c1;
+        font-weight: 700;
+        text-decoration: none;
+    }
+
+        .commish-link:hover {
+            text-decoration: underline;
+        }
+
+    .commish-empty {
+        background: #faf7ff;
+        border: 1px dashed #d9c9f3;
+        border-radius: 18px;
+        padding: 26px;
+        text-align: center;
+        color: #6b7280;
+    }
+
+    @@media (max-width: 991.98px) {
+        .commish-hero-copy {
+            text-align: center;
+            width: 100%;
+        }
+
+        .commish-hero-inner {
+            justify-content: center;
+        }
+    }
+
+    @@media (max-width: 767.98px) {
+        .commish-dashboard {
+            padding: 20px 12px 40px;
+        }
+
+        .commish-hero {
+            padding: 22px 18px;
+            border-radius: 20px;
+        }
+
+        .commish-hero-copy h1 {
+            font-size: 1.6rem;
+        }
+
+        .commish-section-card .card-body,
+        .commish-stat-card .card-body {
+            padding: 20px;
+        }
+
+        .commish-section-title {
+            font-size: 1.15rem;
+        }
+
+        .commish-count-badge {
+            font-size: 0.82rem;
+            padding: 7px 12px;
+        }
+    }
+</style>
+
+@functions {
+    string GetStatusClass(string? status)
+    {
+        if (string.IsNullOrWhiteSpace(status)) return "commish-status";
+
+        return status.Trim().ToLower() switch
+        {
+            "paid" => "commish-status paid",
+            "pending" => "commish-status pending",
+            "failed" => "commish-status failed",
+            "cancelled" => "commish-status cancelled",
+            _ => "commish-status"
+        };
+    }
+}
+
+<div class="commish-dashboard">
+    <div class="commish-shell">
+
+        <div class="commish-hero">
+            <div class="commish-hero-inner">
+                <div class="commish-hero-copy">
+                    <h1>Commish Dashboard</h1>
+                    <p>Current event and league registrations</p>
+                </div>
+
+                <form asp-action="Logout" asp-controller="Commish" method="post" class="m-0">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn commish-logout-btn">Log Out</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="commish-stats">
+            <div class="row g-3 justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="card commish-stat-card h-100">
+                        <div class="card-body">
+                            <div class="commish-stat-label">League Registrations</div>
+                            <div class="commish-stat-number">@Model.LeagueRegistrations.Count</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-5">
+                    <div class="card commish-stat-card h-100">
+                        <div class="card-body">
+                            <div class="commish-stat-label">Event Registrations</div>
+                            <div class="commish-stat-number">@Model.EventRegistrations.Count</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="commish-sections">
+            <div class="card commish-section-card">
+                <div class="card-body">
+                    <div class="commish-section-header">
+                        <h2 class="commish-section-title">League Registrations</h2>
+                        <span class="commish-count-badge">@Model.LeagueRegistrations.Count total</span>
+                    </div>
+
+                    @if (!Model.LeagueRegistrations.Any())
+                    {
+                        <div class="commish-empty">No current league registrations found.</div>
+                    }
+                    else
+                    {
+                        <div class="commish-table-wrap">
+                            <table class="table commish-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Created</th>
+                                        <th>League</th>
+                                        <th>Email</th>
+                                        <th>Status</th>
+                                        <th>Entry</th>
+                                        <th>Fee</th>
+                                        <th>Total</th>
+                                        <th>Link</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.LeagueRegistrations)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="commish-name">@item.CreatedAt.ToString("M/d/yyyy")</div>
+                                                <div class="commish-subtext">@item.CreatedAt.ToString("h:mm tt")</div>
+                                            </td>
+                                            <td>
+                                                <div class="commish-name">@item.LeagueName</div>
+                                                @if (item.SeasonYear.HasValue)
+                                                {
+                                                    <div class="commish-subtext">Season @item.SeasonYear</div>
+                                                }
+                                            </td>
+                                            <td>@item.Email</td>
+                                            <td>
+                                                <span class="@GetStatusClass(item.PaymentStatus)">@item.PaymentStatus</span>
+                                            </td>
+                                            <td>@(item.EntryFee?.ToString("C") ?? "-")</td>
+                                            <td>@(item.ProcessingFee?.ToString("C") ?? "-")</td>
+                                            <td><strong>@(item.TotalPaid?.ToString("C") ?? "-")</strong></td>
+                                            <td>
+                                                @if (!string.IsNullOrWhiteSpace(item.LeagueLink))
+                                                {
+                                                    <a href="@item.LeagueLink" target="_blank" rel="noopener noreferrer" class="commish-link">Open</a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="commish-subtext">-</span>
+                                                }
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="card commish-section-card">
+                <div class="card-body">
+                    <div class="commish-section-header">
+                        <h2 class="commish-section-title">Event Registrations</h2>
+                        <span class="commish-count-badge">@Model.EventRegistrations.Count total</span>
+                    </div>
+
+                    @if (!Model.EventRegistrations.Any())
+                    {
+                        <div class="commish-empty">No current event registrations found.</div>
+                    }
+                    else
+                    {
+                        <div class="commish-table-wrap">
+                            <table class="table commish-table align-middle">
+                                <thead>
+                                    <tr>
+                                        <th>Created</th>
+                                        <th>Event</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>League</th>
+                                        <th>Status</th>
+                                        <th>Ticket</th>
+                                        <th>League Fee</th>
+                                        <th>Proc Fee</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.EventRegistrations)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="commish-name">@item.CreatedAtUtc.ToString("M/d/yyyy")</div>
+                                                <div class="commish-subtext">@item.CreatedAtUtc.ToString("h:mm tt")</div>
+                                            </td>
+                                            <td>@item.EventName</td>
+                                            <td><div class="commish-name">@item.FirstName @item.LastName</div></td>
+                                            <td>@item.Email</td>
+                                            <td>@item.LeagueDisplayName</td>
+                                            <td>
+                                                <span class="@GetStatusClass(item.PaymentStatus)">@item.PaymentStatus</span>
+                                            </td>
+                                            <td>@item.BaseTicketPrice.ToString("C")</td>
+                                            <td>@item.LeagueFee.ToString("C")</td>
+                                            <td>@item.ProcessingFee.ToString("C")</td>
+                                            <td><strong>@item.TotalPaid.ToString("C")</strong></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
