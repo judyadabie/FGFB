@@ -419,6 +419,58 @@
             </div>
         </div>
     </footer>
+
+<!-- Video Modal -->
+<div id="videoModal" class="video-modal" aria-hidden="true">
+    <div class="video-modal__content">
+        <button type="button" id="closeVideoModal" class="video-modal__close">×</button>
+
+        <a href="https://link.fangirlfootball.com/event" class="video-modal__cta-top">
+            Get Details →
+        </a>
+
+        <!-- Entire image clickable -->
+        <a href="https://link.fangirlfootball.com/event" class="video-modal__link">
+            <img src="@Url.Content("~/img/events/FGFDraftWeekendPromo.gif")"
+                 alt="Draft Weekend Promo"
+                 class="video-modal__image" />
+        </a>
+    </div>
+</div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("videoModal");
+    const closeBtn = document.getElementById("closeVideoModal");
+
+    if (!modal || !closeBtn) return;
+
+    // 🔒 Set your launch time (LOCAL browser time)
+    const launchTime = new Date("2026-04-16T21:00:00Z"); // 5pm ET = 21:00 UTC
+
+    const now = new Date();
+
+   if (now >= launchTime && !sessionStorage.getItem("promoShown")) {
+    setTimeout(function () {
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+        sessionStorage.setItem("promoShown", "true");
+    }, 3000);
+}
+
+    closeBtn.addEventListener("click", function () {
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+    });
+
+    modal.addEventListener("click", function (e) {
+        if (e.target === modal) {
+            modal.classList.remove("is-open");
+            modal.setAttribute("aria-hidden", "true");
+        }
+    });
+});
+</script>
     <!-- footer area end -->
     <!-- JS here -->
     <script src="js/vendor/jquery-3.5.1.min.js"></script>

@@ -42,7 +42,11 @@ namespace FGFB.Controllers
         {
             return View("~/Views/Events/ChampionshipDraftWeekend.cshtml");
         }
-
+        [HttpGet]
+        public IActionResult ChampionshipDraftWeekendExplore()
+        {
+            return View("~/Views/Events/ChampionshipDraftWeekendExplore.cshtml");
+        }
         [HttpGet]
         public IActionResult ChampionshipDraftWeekendSignup()
         {
@@ -94,6 +98,7 @@ namespace FGFB.Controllers
                 CustomerEmail = vm.Email,
                 SuccessUrl = successUrl,
                 CancelUrl = cancelUrl,
+                AllowPromotionCodes = true,
                 Metadata = new Dictionary<string, string>
                 {
                     { "eventName", "Championship Draft Weekend" },
@@ -225,7 +230,10 @@ namespace FGFB.Controllers
 
         private ChampionshipDraftWeekendSignupViewModel BuildSignupViewModel()
         {
-            var vm = new ChampionshipDraftWeekendSignupViewModel();
+            var vm = new ChampionshipDraftWeekendSignupViewModel
+            {
+                LeagueLevel = "0"
+            };
             ApplyTicketPricing(vm);
             return vm;
         }
@@ -237,27 +245,27 @@ namespace FGFB.Controllers
 
             if (today <= new DateTime(eventYear, 5, 31))
             {
-                vm.BaseTicketPrice = 57.77m;
+                vm.BaseTicketPrice = 67.77m;
                 vm.PricingLabel = "Early Bird pricing through May 31";
             }
             else if (today <= new DateTime(eventYear, 6, 30))
             {
-                vm.BaseTicketPrice = 67.77m;
+                vm.BaseTicketPrice = 77.77m;
                 vm.PricingLabel = "June pricing through June 30";
             }
             else if (today <= new DateTime(eventYear, 7, 31))
             {
-                vm.BaseTicketPrice = 77.77m;
+                vm.BaseTicketPrice = 87.77m;
                 vm.PricingLabel = "July pricing through July 31";
             }
             else if (today <= new DateTime(eventYear, 8, 15))
             {
-                vm.BaseTicketPrice = 87.77m;
+                vm.BaseTicketPrice = 97.77m;
                 vm.PricingLabel = "Standard pricing through Aug 15";
             }
             else
             {
-                vm.BaseTicketPrice = 97.77m;
+                vm.BaseTicketPrice = 107.77m;
                 vm.PricingLabel = "Final pricing through event day";
             }
         }

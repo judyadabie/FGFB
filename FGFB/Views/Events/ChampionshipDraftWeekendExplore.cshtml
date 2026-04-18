@@ -1,0 +1,603 @@
+﻿@{
+    Layout = null;
+    ViewData["Title"] = "Explore the Weekend";
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/championship-draft-weekend.css" asp-append-version="true" />
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
+    <style>
+        .cdw-schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 24px;
+        }
+
+        @@media (max-width: 1199px) {
+            .cdw-schedule-grid
+
+        {
+            grid-template-columns: 1fr;
+        }
+
+        }
+        .cdw-explore-hero {
+            position: relative;
+            overflow: hidden;
+            padding: 64px 0 96px;
+            background: radial-gradient(circle at top left, rgba(236, 72, 153, 0.26), transparent 26%), radial-gradient(circle at top right, rgba(168, 85, 247, 0.22), transparent 28%), linear-gradient(180deg, #14081f 0%, #12091f 100%);
+        }
+
+        .cdw-explore-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 44px;
+            align-items: center;
+        }
+
+        .cdw-kicker {
+            display: inline-flex;
+            align-items: center;
+            padding: 10px 18px;
+            border-radius: 999px;
+            border: 1px solid var(--cdw-border);
+            background: rgba(255,255,255,0.08);
+            font-size: 11px;
+            letter-spacing: 0.28em;
+            text-transform: uppercase;
+            color: rgba(255,255,255,0.88);
+            margin-bottom: 22px;
+            font-weight: 700;
+        }
+
+        .cdw-explore-copy h1 {
+            font-size: clamp(46px, 6vw, 82px);
+            line-height: 0.95;
+            margin: 0;
+            font-weight: 900;
+            letter-spacing: -0.04em;
+        }
+
+            .cdw-explore-copy h1 span {
+                background: linear-gradient(to right, #f9a8d4, #f5d0fe, #fde68a);
+                -webkit-background-clip: text;
+                background-clip: text;
+                color: transparent;
+            }
+
+        .cdw-explore-lead {
+            max-width: 700px;
+            margin-top: 24px;
+            font-size: 20px;
+            line-height: 1.85;
+            color: var(--cdw-muted);
+        }
+
+        .cdw-quick-notes {
+            margin-top: 32px;
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 16px;
+        }
+
+        .cdw-quick-note {
+            border: 1px solid var(--cdw-border);
+            background: linear-gradient(to right, rgba(192, 38, 211, 0.14), rgba(124, 58, 237, 0.14));
+            border-radius: 24px;
+            padding: 22px;
+            backdrop-filter: blur(8px);
+        }
+
+        .cdw-quick-note-label {
+            text-transform: uppercase;
+            letter-spacing: 0.20em;
+            font-size: 11px;
+            color: rgba(255,255,255,0.52);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .cdw-quick-note strong {
+            display: block;
+            font-size: 20px;
+            line-height: 1.4;
+            color: #fff;
+        }
+
+        .cdw-hero-side {
+            display: grid;
+            gap: 18px;
+        }
+
+        .cdw-image-placeholder {
+            border-radius: 30px;
+            border: 1px dashed rgba(255,255,255,0.22);
+            background: linear-gradient(to right, rgba(192, 38, 211, 0.10), rgba(124, 58, 237, 0.10)), rgba(255,255,255,0.04);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: rgba(255,255,255,0.70);
+            padding: 26px;
+            line-height: 1.8;
+            font-weight: 700;
+            min-height: 250px;
+        }
+
+            .cdw-image-placeholder.tall {
+                min-height: 420px;
+            }
+
+        .cdw-story-section {
+            padding: 96px 0;
+        }
+
+        .cdw-story-grid {
+            display: grid;
+            grid-template-columns: 0.95fr 1.05fr;
+            gap: 46px;
+            align-items: start;
+        }
+
+        .cdw-story-panel {
+            border-radius: 30px;
+            border: 1px solid var(--cdw-border);
+            background: linear-gradient(to right, rgba(192, 38, 211, 0.14), rgba(124, 58, 237, 0.14));
+            padding: 34px;
+            box-shadow: 0 18px 40px rgba(0, 0, 0, 0.18);
+        }
+
+            .cdw-story-panel h2,
+            .cdw-day-card h3,
+            .cdw-place-card h3,
+            .cdw-perk-card h3 {
+                margin: 0 0 14px;
+                font-weight: 900;
+                letter-spacing: -0.03em;
+            }
+
+            .cdw-story-panel h2 {
+                font-size: clamp(34px, 4vw, 54px);
+                line-height: 1.02;
+            }
+
+            .cdw-story-panel p {
+                margin: 0 0 18px;
+                color: var(--cdw-muted);
+                line-height: 1.9;
+                font-size: 17px;
+            }
+
+        .cdw-timeline {
+            display: grid;
+            gap: 18px;
+        }
+
+        .cdw-day-card {
+            border-radius: 28px;
+            padding: 28px;
+            border: 1px solid var(--cdw-border);
+            background: rgba(255,255,255,0.05);
+        }
+
+        .cdw-day-time {
+            display: inline-block;
+            margin-bottom: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.22em;
+            text-transform: uppercase;
+            color: rgba(249, 168, 212, 0.82);
+        }
+
+        .cdw-day-card h3 {
+            font-size: 28px;
+        }
+
+        .cdw-day-card p {
+            margin: 0;
+            color: var(--cdw-muted);
+            line-height: 1.85;
+        }
+
+        .cdw-day-list {
+            margin: 16px 0 0;
+            padding-left: 18px;
+            color: rgba(255,255,255,0.84);
+            line-height: 1.9;
+        }
+
+        .cdw-section-light-custom {
+            background: #fff;
+            color: var(--cdw-dark-text);
+        }
+
+            .cdw-section-light-custom .cdw-text,
+            .cdw-section-light-custom p {
+                color: #615a6d;
+            }
+
+            .cdw-section-light-custom .cdw-image-placeholder {
+                border: 1px dashed #ddd6e7;
+                background: #f7f5fa;
+                color: #5d5667;
+            }
+
+        .cdw-place-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 0.95fr;
+            gap: 42px;
+            align-items: center;
+        }
+
+        .cdw-schedule-time {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 0.20em;
+            text-transform: uppercase;
+            color: rgba(249, 168, 212, 0.8);
+        }
+        .cdw-place-card {
+            border-radius: 30px;
+            padding: 34px;
+            border: 1px solid var(--cdw-light-border);
+            background: linear-gradient(to right, #fdf2f8, #fffbeb);
+            box-shadow: 0 18px 40px rgba(21, 11, 35, 0.08);
+        }
+
+            .cdw-place-card h3 {
+                font-size: clamp(34px, 4vw, 52px);
+                color: var(--cdw-dark-text);
+                line-height: 1.02;
+            }
+
+            .cdw-place-card p {
+                margin: 0 0 18px;
+                color: #615a6d;
+                line-height: 1.9;
+                font-size: 17px;
+            }
+
+        .cdw-place-pills {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .cdw-place-pill {
+            border: 1px solid var(--cdw-light-border);
+            background: rgba(255,255,255,0.78);
+            border-radius: 18px;
+            padding: 16px 18px;
+            font-weight: 700;
+            color: #2e243a;
+        }
+
+        .cdw-perk-grid {
+            margin-top: 34px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 22px;
+        }
+
+        .cdw-perk-card {
+            border-radius: 26px;
+            padding: 28px;
+            border: 1px solid var(--cdw-light-border);
+            background: #fff;
+            box-shadow: 0 14px 28px rgba(21, 11, 35, 0.06);
+        }
+
+            .cdw-perk-card h3 {
+                font-size: 24px;
+                color: var(--cdw-dark-text);
+            }
+
+            .cdw-perk-card p {
+                margin: 0;
+                color: #615a6d;
+                line-height: 1.8;
+            }
+
+        .cdw-closing-band {
+            padding: 42px 0;
+            border-top: 1px solid var(--cdw-border);
+            background: linear-gradient(to right, rgba(192, 38, 211, 0.14), rgba(124, 58, 237, 0.14));
+        }
+
+        .cdw-closing-grid {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 24px;
+        }
+
+            .cdw-closing-grid h2 {
+                margin: 0;
+                font-size: 34px;
+                font-weight: 900;
+            }
+
+            .cdw-closing-grid p {
+                margin: 10px 0 0;
+                color: rgba(255,255,255,0.66);
+                line-height: 1.75;
+            }
+
+        @@media (max-width: 1199px) {
+            .cdw-explore-grid,
+            .cdw-story-grid,
+            .cdw-place-grid,
+            .cdw-perk-grid,
+            .cdw-place-pills {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @@media (max-width: 767px) {
+            .cdw-explore-hero,
+            .cdw-story-section {
+                padding: 72px 0;
+            }
+
+            .cdw-quick-notes,
+            .cdw-closing-grid {
+                grid-template-columns: 1fr;
+                display: grid;
+            }
+
+            .cdw-story-panel,
+            .cdw-day-card,
+            .cdw-place-card,
+            .cdw-perk-card {
+                padding: 24px;
+            }
+
+            .cdw-image-placeholder.tall {
+                min-height: 300px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="cdw-explore-intro">
+        <div class="cdw-container">
+            <div class="cdw-explore-intro-top">
+                <div>
+                    <div class="cdw-eyebrow">Explore the Weekend</div>
+                    <h1>Draft Weekend</h1>
+                </div>
+
+                <div class="cdw-explore-intro-actions">
+                    <a asp-controller="Events" asp-action="ChampionshipDraftWeekendSignup" class="cdw-btn cdw-btn-primary">Sign Up Now</a>
+                    <a asp-controller="Events" asp-action="ChampionshipDraftWeekend" class="cdw-btn cdw-btn-outline">Back to Event Page</a>
+                </div>
+            </div>
+
+            <div class="cdw-explore-editorial">
+                <div class="cdw-explore-overview">
+                    <p class="cdw-explore-lead">
+                        Championship Draft Weekend brings women together for a football-centered weekend in Tampa,
+                        starting with Friday night happy hour and continuing through Saturday’s live drafts,
+                        food and drinks, a Fan Girl gift bag, and a closing presentation.
+                    </p>
+
+                    <div class="cdw-explore-overview-grid">
+                        <div class="cdw-explore-overview-item">
+                            <span>Friday</span>
+                            <strong>7 PM happy hour to connect and meet</strong>
+                        </div>
+                        <div class="cdw-explore-overview-item">
+                            <span>Saturday</span>
+                            <strong>11 AM–5 PM main event and live drafts</strong>
+                        </div>
+                        <div class="cdw-explore-overview-item">
+                            <span>Hosted at</span>
+                            <strong>Aloft Tampa Midtown</strong>
+                        </div>
+                        <div class="cdw-explore-overview-item">
+                            <span>Included</span>
+                            <strong>Food, drinks, gift bag, and networking</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cdw-explore-images">
+
+                    <!-- FULL IMAGE CARD -->
+                    <div class="cdw-image-card large">
+                        <img src="~/img/events/draftday.png" />
+                    </div>
+
+                    <!-- ROW -->
+                    <div class="cdw-explore-image-row">
+
+                        <div class="cdw-image-card small">
+                            <img src="~/img/events/socializing.png" />
+                        </div>
+
+                        <div class="cdw-image-card small">
+                            <img src="~/img/events/aloft.png" />
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+   
+    <section class="cdw-section">
+        <div class="cdw-container">
+            <div class="cdw-section-heading">
+                <div class="cdw-eyebrow">Weekend Schedule</div>
+                <h2>How the weekend unfolds</h2>
+            </div>
+
+            <div class="cdw-feature-grid">
+
+                <!-- FRIDAY -->
+                <div class="cdw-feature-card">
+                    <div class="cdw-schedule-time">Friday · 7:00 PM</div>
+                    <h3>Happy Hour to Connect and Meet</h3>
+                    <p>
+                        Start the weekend in a relaxed setting with a casual happy hour.
+                        Meet other attendees, grab a drink, and ease into the weekend
+                        before draft day begins.
+                    </p>
+                </div>
+
+                <!-- CHECK-IN -->
+                <div class="cdw-feature-card">
+                    <div class="cdw-schedule-time">Saturday · 11:00 AM – 11:15 AM</div>
+                    <h3>Check-In + Arrival</h3>
+                    <p>
+                        Arrive, check in, grab your Fan Girl gift bag, and get settled
+                        before the day begins.
+                    </p>
+                </div>
+
+                <!-- WELCOME -->
+                <div class="cdw-feature-card">
+                    <div class="cdw-schedule-time">Saturday · 11:15 AM</div>
+                    <h3>Welcome + Opening</h3>
+                    <p>
+                        A quick welcome to walk through the event, introduce the experience,
+                        and set the tone for the day ahead.
+                    </p>
+                </div>
+
+                <!-- CLINIC -->
+                <div class="cdw-feature-card">
+                    <div class="cdw-schedule-time">Saturday · 11:30 AM</div>
+                    <h3>Optional Beginner’s Clinic</h3>
+                    <p>
+                        A short, beginner-friendly session covering fantasy basics,
+                        draft strategy, and how everything works—perfect for anyone
+                        who wants a confidence boost before drafting.
+                    </p>
+                </div>
+
+                <!-- MAIN EVENT -->
+                <div class="cdw-feature-card">
+                    <div class="cdw-schedule-time">Saturday · 12:00 PM – 5:00 PM</div>
+                    <h3>Live Drafts + Main Event</h3>
+                    <p>
+                        The core of the day. Multiple leagues drafting live with time to
+                        talk strategy, connect, and enjoy the full experience.
+                    </p>
+                    <ul>
+                        <li>Food and drinks throughout the day</li>
+                        <li>Fan Girl gift bag for all attendees</li>
+                        <li>Social, relaxed atmosphere between drafts</li>
+                    </ul>
+                </div>
+
+                <!-- CLOSING -->
+                <div class="cdw-feature-card">
+                    <div class="cdw-schedule-time">Saturday · 4:30 PM</div>
+                    <h3>Closing Presentation + Sign-Off</h3>
+                    <p>
+                        Wrap up the weekend together with a closing presentation and
+                        final send-off before the season begins.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section class="cdw-story-section cdw-section-light-custom">
+        <div class="cdw-container">
+            <div class="cdw-place-grid">
+                <div class="cdw-place-card">
+                    <div class="cdw-eyebrow purple">Where it happens</div>
+                    <h3>Aloft Tampa Midtown</h3>
+
+                    <p>
+                        Championship Draft Weekend will be hosted at Aloft Tampa Midtown, giving the weekend
+                        a modern, elevated setting that matches the energy of the event.
+                    </p>
+
+                    <p>
+                        Being near the airport makes it easy for travelers, and the rooftop pool adds to the
+                        feel of a true getaway weekend instead of just a one-day event.
+                    </p>
+                    <p>
+                        Group Rates Starting at <b>$155 a night</b>
+                    </p>
+
+                    <div class="cdw-place-pills">
+                        <div class="cdw-place-pill">Near the airport</div>
+                        <div class="cdw-place-pill">Rooftop pool</div>
+                        <div class="cdw-place-pill">Midtown Tampa vibe</div>
+                    </div>
+                </div>
+
+                <div class="cdw-hero-side">
+                    <div class="cdw-image-card large">
+                        <img src="~/img/events/aloft4.png" />
+                    </div>
+                    <div class="cdw-image-card large">
+                        <img src="~/img/events/aloft3.png" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="cdw-perk-grid">
+                <div class="cdw-perk-card">
+                    <h3>Food &amp; Drinks</h3>
+                    <p>
+                        Food and drinks throughout the day help make Saturday feel relaxed, social,
+                        and easy to enjoy while still keeping the focus on the drafts.
+                    </p>
+                </div>
+
+                <div class="cdw-perk-card">
+                    <h3>Fan Girl Gift Bag</h3>
+                    <p>
+                        Each attendee receives a Fan Girl gift bag as part of the experience,
+                        adding a fun welcome touch and something special to take home.
+                    </p>
+                </div>
+
+                <div class="cdw-perk-card">
+                    <h3>A Full Weekend Feel</h3>
+                    <p>
+                        Between the Friday night happy hour, Saturday event, and host hotel atmosphere,
+                        the page should make it clear this is more than just showing up for a draft.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="cdw-closing-band">
+        <div class="cdw-container">
+            <div class="cdw-closing-grid">
+                <div>
+                    <h2>Spots are limited—don’t miss out.</h2>
+                    <p>
+                        Championship Draft Weekend brings together football, community, and a fun weekend atmosphere
+                        in one place. From the first Friday night connection to the final Saturday sign-off,
+                        the experience is meant to stand out.
+                    </p>
+                </div>
+
+                <div class="cdw-footer-actions">
+                    <a asp-controller="Events" asp-action="ChampionshipDraftWeekendSignup" class="cdw-btn cdw-btn-primary">Reserve Your Spot</a>
+                    <a asp-controller="Events" asp-action="ChampionshipDraftWeekend" class="cdw-btn cdw-btn-outline">Back to Event Page</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>

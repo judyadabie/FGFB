@@ -18,6 +18,10 @@ namespace FGFB.Data
         {
             base.OnModelCreating(modelBuilder);
 
+            modelBuilder.Entity<LeagueRegistration>()
+        .ToTable(tb => tb.HasTrigger("trg_CloseLeagueWhenFull"));
+            modelBuilder.Entity<LeagueRegistration>()
+                .ToTable(tb => tb.UseSqlOutputClause(false));
             modelBuilder.Entity<EventRegistration>(entity =>
             {
                 entity.ToTable("EventRegistrations");

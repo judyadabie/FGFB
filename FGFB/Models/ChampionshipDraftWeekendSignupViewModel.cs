@@ -18,7 +18,7 @@ namespace FGFB.Models
         public string Email { get; set; } = string.Empty;
 
         [Required]
-        public string LeagueLevel { get; set; } = "100";
+        public string LeagueLevel { get; set; } = "0";
 
         [Range(typeof(bool), "true", "true", ErrorMessage = "You must agree to the Terms and Conditions.")]
         public bool AgreeToTerms { get; set; }
@@ -42,7 +42,7 @@ namespace FGFB.Models
             "50" => 50m,
             "25" => 25m,
             "0" => 0m,
-            _ => 100m
+            _ => 0m
         };
 
         [ValidateNever]
@@ -52,7 +52,7 @@ namespace FGFB.Models
             "50" => "$50 League",
             "25" => "$25 League",
             "0" => "Free Community League",
-            _ => "$100 Championship League"
+            _ => "Free Community League"
         };
 
         [ValidateNever]

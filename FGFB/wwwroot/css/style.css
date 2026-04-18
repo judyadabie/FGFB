@@ -8863,3 +8863,122 @@ p.checkout-coupon input[type=text]:focus {
     .contest-link a {
         text-decoration-line: underline;
     }
+
+/* Fullscreen overlay */
+#videoModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+}
+
+    /* Center modal */
+    #videoModal.is-open {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+/* Card container */
+.video-modal__content {
+    position: relative;
+    width: 90%;
+    max-width: 420px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #111;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.5);
+}
+
+/* Inner layout */
+.video-modal__body {
+    display: flex;
+    flex-direction: column;
+}
+
+/* GIF fills top */
+.video-modal__image {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.video-modal__cta-top {
+    position: absolute;
+    top: 4px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 3;
+    width: 80%; /* makes it wide */
+    max-width: 2800px;
+    text-align: center;
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #d946ef, #a855f7);
+    color: #fff !important;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.5px;
+    border-radius: 999px;
+    text-decoration: none !important;
+    box-shadow: 0 8px 20px rgba(168, 85, 247, 0.5);
+    transition: all 0.25s ease;
+}
+
+    /* Hover / tap grow effect */
+    .video-modal__cta-top:hover {
+        transform: translateX(-50%) scale(1.08);
+        box-shadow: 0 12px 28px rgba(168, 85, 247, 0.7);
+    }
+
+/* Subtle pulse animation */
+@keyframes pulseGlow {
+    0% {
+        box-shadow: 0 8px 20px rgba(168, 85, 247, 0.5);
+    }
+
+    50% {
+        box-shadow: 0 12px 30px rgba(217, 70, 239, 0.8);
+    }
+
+    100% {
+        box-shadow: 0 8px 20px rgba(168, 85, 247, 0.5);
+    }
+}
+
+.video-modal__cta-top {
+    animation: pulseGlow 2.5s infinite;
+}
+
+/* Close button */
+.video-modal__close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    width: 34px;
+    height: 34px;
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    color: #000;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+/* Make the link fill the container */
+.video-modal__link {
+    display: block;
+    width: 100%;
+}
+
+/* Prevent gaps */
+.video-modal__image {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+.video-modal__link {
+    cursor: pointer;
+}

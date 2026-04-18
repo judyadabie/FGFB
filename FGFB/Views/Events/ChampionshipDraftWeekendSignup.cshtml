@@ -10,8 +10,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>@ViewData["Title"]</title>
     <link rel="stylesheet" href="~/css/championship-draft-weekend-signup.css" asp-append-version="true" />
+    <link rel="shortcut icon" type="image/x-icon" href="/img/favicon.png">
 </head>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 <body>
     <div class="container page">
         <div class="topbar">
@@ -72,22 +73,13 @@
                             <label asp-for="LeagueLevel">Choose Your League</label>
 
                             <div class="league-options">
-                                <label class="league-option @(Model.LeagueLevel == "100" ? "selected" : "")">
-                                    <input type="radio" asp-for="LeagueLevel" value="100" />
+                                <label class="league-option @(Model.LeagueLevel == "0" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="0" />
                                     <div class="league-top">
-                                        <span class="league-name">$100 Championship League</span>
-                                        <span class="league-price">$100</span>
+                                        <span class="league-name">Free Community League</span>
+                                        <span class="league-price">Free</span>
                                     </div>
-                                    <div class="small">Highest prize pool and premium competition level.</div>
-                                </label>
-
-                                <label class="league-option @(Model.LeagueLevel == "50" ? "selected" : "")">
-                                    <input type="radio" asp-for="LeagueLevel" value="50" />
-                                    <div class="league-top">
-                                        <span class="league-name">$50 League</span>
-                                        <span class="league-price">$50</span>
-                                    </div>
-                                    <div class="small">Competitive and more accessible.</div>
+                                    <div class="small">Join the weekend with no league entry fee.</div>
                                 </label>
 
                                 <label class="league-option @(Model.LeagueLevel == "25" ? "selected" : "")">
@@ -99,13 +91,22 @@
                                     <div class="small">Affordable and fun.</div>
                                 </label>
 
-                                <label class="league-option @(Model.LeagueLevel == "0" ? "selected" : "")">
-                                    <input type="radio" asp-for="LeagueLevel" value="0" />
+                                <label class="league-option @(Model.LeagueLevel == "50" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="50" />
                                     <div class="league-top">
-                                        <span class="league-name">Free Community League</span>
-                                        <span class="league-price">Free</span>
+                                        <span class="league-name">$50 League</span>
+                                        <span class="league-price">$50</span>
                                     </div>
-                                    <div class="small">Join the weekend with no league entry fee.</div>
+                                    <div class="small">Competitive and more accessible.</div>
+                                </label>
+
+                                <label class="league-option @(Model.LeagueLevel == "100" ? "selected" : "")">
+                                    <input type="radio" asp-for="LeagueLevel" value="100" />
+                                    <div class="league-top">
+                                        <span class="league-name">$100 Championship League</span>
+                                        <span class="league-price">$100</span>
+                                    </div>
+                                    <div class="small">Highest prize pool and premium competition level.</div>
                                 </label>
                             </div>
                         </div>
@@ -188,32 +189,29 @@
 
                 <div class="prize-box">
                     <h3>League Prize Structure</h3>
-
+                    <div class="prize-tier">
+                        <strong>Free Community League</strong>
+                        <div>Community bragging rights and a fun weekend competition</div>
+                    </div>
+                    <div class="prize-tier">
+                        <strong>$25 League</strong>
+                        <div>1st: $180 | 2nd: $90 | 3rd: $30</div>
+                    </div>
+                    <div class="prize-tier">
+                        <strong>$50 League</strong>
+                        <div>1st: $360 | 2nd: $180 | 3rd: $60</div>
+                    </div>
                     <div class="prize-tier">
                         <strong>$100 Championship League</strong>
                         <div>1st: $720 | 2nd: $360 | 3rd: $120</div>
                     </div>
 
-                    <div class="prize-tier">
-                        <strong>$50 League</strong>
-                        <div>1st: $360 | 2nd: $180 | 3rd: $60</div>
-                    </div>
-
-                    <div class="prize-tier">
-                        <strong>$25 League</strong>
-                        <div>1st: $180 | 2nd: $90 | 3rd: $30</div>
-                    </div>
-
-                    <div class="prize-tier">
-                        <strong>Free Community League</strong>
-                        <div>Community bragging rights and a fun weekend competition</div>
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <partial name="_ValidationScriptsPartial" />
+
 
     <script>
         (function () {
@@ -248,7 +246,6 @@
                 }).format(value);
             }
 
-            function updateSelected() {
                 let leagueFee = 100;
 
                 options.forEach((option) => {
